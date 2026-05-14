@@ -356,9 +356,9 @@ async function login(event) {
       return;
     }
 
-    localStorage.setItem(
+   localStorage.setItem(
   "user",
-  JSON.stringify(data)
+  JSON.stringify(data.user || data)
 );
 
     showToast(

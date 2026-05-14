@@ -306,11 +306,11 @@ const user =
   getCurrentUser();
 
 if (!user || !user.email) {
-  showToast("Сначала войдите", "error");
 
-  setTimeout(() => {
-    window.location.href = "/login.html";
-  }, 1200);
+  localStorage.removeItem("user");
+
+  window.location.href =
+    "/login.html";
 }
 
 const params =
@@ -584,6 +584,7 @@ async function start() {
 
 start();
 </script>
-<div id="toast" class="toast"></div>
+
 </body>
+<div id="toast" class="toast"></div>
 </html>
