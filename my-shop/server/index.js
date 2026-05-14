@@ -192,13 +192,18 @@ app.put("/users/:id/name", async (req, res) => {
 });
 
 app.post("/upload", upload.single("image"), (req, res) => {
+
   try {
+
     res.json({
+
       message: "Фото загружено",
+
       imageUrl: req.file.path
     });
 
   } catch (err) {
+
     res.status(500).json({
       error: err.message
     });
