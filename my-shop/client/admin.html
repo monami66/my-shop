@@ -375,7 +375,7 @@ if (
 <div class="navbar">
 
   <div class="logo">
-  ⚙️ ADMIN <span>PANEL</span>
+   ADMIN <span>PANEL</span>
 </div>
 
   <div class="nav-links">
@@ -390,39 +390,39 @@ if (
 <div class="container">
 
   <h1 class="title">
-    📊 Админ статистика
+     Админ статистика
   </h1>
 
   <div class="stats">
 
     <div class="card">
       <h2 id="usersCount">0</h2>
-      <p>👥 Пользователей</p>
+      <p> Пользователей</p>
     </div>
 
     <div class="card">
       <h2 id="productsCount">0</h2>
-      <p>📦 Товаров</p>
+      <p> Товаров</p>
     </div>
 
     <div class="card">
       <h2 id="ordersCount">0</h2>
-      <p>🧾 Заказов</p>
+      <p> Заказов</p>
     </div>
 
     <div class="card">
       <h2 id="sales">0 ₸</h2>
-      <p>💰 Продажи</p>
+      <p> Продажи</p>
     </div>
 
     <div class="card">
       <h2 id="newOrders">0</h2>
-      <p>🆕 Новые заказы</p>
+      <p> Новые заказы</p>
     </div>
 
     <div class="card">
       <h2 id="finishedOrders">0</h2>
-      <p>✅ Завершённые</p>
+      <p> Завершённые</p>
     </div>
 
   </div>
@@ -430,17 +430,17 @@ if (
   <div class="charts">
 
     <div class="chart-card">
-      <h2>📈 Продажи по дням</h2>
+      <h2> Продажи по дням</h2>
       <canvas id="salesChart"></canvas>
     </div>
 
     <div class="chart-card">
-      <h2>🧾 Заказы по статусам</h2>
+      <h2> Заказы по статусам</h2>
       <canvas id="statusChart"></canvas>
     </div>
 
     <div class="chart-card">
-      <h2>🏆 Популярные товары</h2>
+      <h2> Популярные товары</h2>
       <canvas id="popularChart"></canvas>
     </div>
 
@@ -449,31 +449,31 @@ if (
   <div class="orders">
 
     <h1 class="title">
-      🧾 Все заказы
+       Все заказы
     </h1>
 
     <div id="ordersList"></div>
 
   </div>
 
-  <!-- 👥 ПОЛЬЗОВАТЕЛИ -->
+
 
   <div class="orders">
 
     <h1 class="title">
-      👥 Пользователи
+       Пользователи
     </h1>
 
     <div id="usersList"></div>
 
   </div>
 
-  <!-- 📦 ТОВАРЫ -->
+ 
 
   <div class="orders">
 
     <h1 class="title">
-      📦 Все товары
+       Все товары
     </h1>
 
     <div id="productsList"></div>
@@ -644,14 +644,14 @@ function renderOrders() {
           class="save-btn"
           onclick="saveStatus('${order._id}')"
         >
-          💾 Сохранить статус
+           Сохранить статус
         </button>
 
         <button
           class="delete-btn"
           onclick="deleteOrder('${order._id}')"
         >
-          🗑 Удалить заказ
+           Удалить заказ
         </button>
 
       </div>
@@ -850,11 +850,11 @@ async function loadUsers() {
       <div class="user-card">
 
         <h3>
-          👤 ${user.name}
+           ${user.name}
         </h3>
 
         <p>
-          📧 ${user.email}
+           ${user.email}
         </p>
 
         <p>
@@ -911,7 +911,7 @@ async function loadUsers() {
     `;
   });
 }
-// 🗑 УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ
+
 async function deleteUser(id) {
 
   if (!confirm(
@@ -933,7 +933,7 @@ async function deleteUser(id) {
 }
 
 
-// 🚫 БАН ПОЛЬЗОВАТЕЛЯ
+
 async function banUser(id) {
 
   if (!confirm(
@@ -954,7 +954,7 @@ async function banUser(id) {
 }
 
 
-// ✅ РАЗБАН
+
 async function unbanUser(id) {
 
   if (!confirm(
@@ -975,7 +975,7 @@ async function unbanUser(id) {
 }
 
 
-// 📦 ТОВАРЫ
+
 async function loadProducts() {
 
   const res =
@@ -1002,15 +1002,15 @@ async function loadProducts() {
       <div class="product-card">
 
         <h3>
-          📦 ${product.title}
+           ${product.title}
         </h3>
 
         <p>
-          💰 ${product.price} ₸
+           ${product.price} ₸
         </p>
 
         <p>
-          👤 ${product.user?.name || "Неизвестно"}
+           ${product.user?.name || "Неизвестно"}
         </p>
 
         <img src="${image}">
@@ -1021,7 +1021,7 @@ async function loadProducts() {
           class="delete-product-btn"
           onclick="deleteProduct('${product._id}')"
         >
-          🗑 Удалить товар
+           Удалить товар
         </button>
 
       </div>

@@ -428,7 +428,7 @@
     <a href="/index.html">Главная</a>
     <a href="/products.html">Товары</a>
     <a href="/cart.html">
-      🛒 Корзина (<span id="cart-count">0</span>)
+       Корзина (<span id="cart-count">0</span>)
     </a>
   </div>
 
@@ -528,38 +528,38 @@ async function checkUser() {
       <div class="dropdown" id="dropdownMenu">
 
         <a href="/notifications.html">
-          🔔 Уведомления
+           Уведомления
           ${unread > 0 ? `<span class="badge">${unread}</span>` : ""}
         </a>
 
         <a href="/messages.html">
-          💬 Сообщения
+           Сообщения
         </a>
 
         <a href="/favorites.html">
-          ❤️ Избранное
+           Избранное
         </a>
 
         <a href="/add-product.html">
-          ➕ Добавить товар
+           Добавить товар
         </a>
 
         <a href="/my-products.html">
-          📦 Мои товары
+           Мои товары
         </a>
 
         <a href="/profile.html">
-          👤 Личный кабинет
+           Личный кабинет
         </a>
 
         ${user.email === "sobakizomb@gmail.com" ? `
           <a href="/admin.html">
-            ⚙️ Админка
+             Админка
           </a>
         ` : ""}
 
         <button onclick="logout()">
-          🚪 Выйти
+           Выйти
         </button>
 
       </div>
@@ -681,13 +681,13 @@ async function loadProduct() {
       <p>${p.description}</p>
 
       <p>
-        👤 Продавец:
+         Продавец:
         ${p.user?.name || "Неизвестно"}
       </p>
 
       <div class="specs">
 
-        <h3>⚙️ Характеристики</h3>
+        <h3> Характеристики</h3>
 
         <div class="spec-item">
           <b>Артикул:</b> ${p.article || "-"}
@@ -715,14 +715,14 @@ async function loadProduct() {
         class="buy-btn"
         onclick='addToCart(${JSON.stringify(p)})'
       >
-        🛒 Добавить в корзину
+         Добавить в корзину
       </button>
 
       <button
         class="fav-btn"
         onclick='addToFavorites(${JSON.stringify(p)})'
       >
-        ❤️ В избранное
+         В избранное
       </button>
 
       <button
@@ -735,7 +735,7 @@ async function loadProduct() {
           )
         "
       >
-        💬 Написать продавцу
+         Написать продавцу
       </button>
 
     </div>

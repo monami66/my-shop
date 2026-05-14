@@ -376,7 +376,7 @@
 
 <section class="page-header">
   <h1>
-    ❤️ <span>Избранное</span>
+     <span>Избранное</span>
   </h1>
 
   <p>
@@ -452,38 +452,38 @@ async function checkUser() {
       <div class="dropdown" id="dropdownMenu">
 
         <a href="/notifications.html">
-          🔔 Уведомления
+           Уведомления
           ${unread > 0 ? `<span class="badge">${unread}</span>` : ""}
         </a>
 
         <a href="/messages.html">
-          💬 Сообщения
+           Сообщения
         </a>
 
         <a href="/favorites.html">
-          ❤️ Избранное
+           Избранное
         </a>
 
         <a href="/add-product.html">
-          ➕ Добавить товар
+           Добавить товар
         </a>
 
         <a href="/my-products.html">
-          📦 Мои товары
+           Мои товары
         </a>
 
         <a href="/profile.html">
-          👤 Личный кабинет
+           Личный кабинет
         </a>
 
         ${user.email === "sobakizomb@gmail.com" ? `
           <a href="/admin.html">
-            ⚙️ Админка
+             Админка
           </a>
         ` : ""}
 
         <button onclick="logout()">
-          🚪 Выйти
+           Выйти
         </button>
 
       </div>
@@ -582,7 +582,7 @@ function loadFavorites() {
             class="remove-btn"
             onclick="removeFavorite(${index})"
           >
-            🗑 Удалить из избранного
+             Удалить из избранного
           </button>
 
         </div>

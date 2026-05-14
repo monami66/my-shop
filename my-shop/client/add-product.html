@@ -307,7 +307,7 @@
     <a href="/index.html">Главная</a>
     <a href="/products.html">Товары</a>
     <a href="/cart.html">
-      🛒 Корзина (<span id="cart-count">0</span>)
+       Корзина (<span id="cart-count">0</span>)
     </a>
   </div>
 
@@ -321,7 +321,7 @@
 
 <div class="container">
 
-  <h2>➕ Добавить товар</h2>
+  <h2> Добавить товар</h2>
 
   <input
     type="text"
@@ -362,7 +362,7 @@
   </select>
 
   <div class="subtitle">
-    ⚙️ Характеристики
+     Характеристики
   </div>
 
   <input type="text" id="article" placeholder="Артикул">
@@ -376,7 +376,7 @@
   </select>
 
   <div class="subtitle">
-    🖼 Фото товара
+     Фото товара
   </div>
 
   <input
@@ -467,13 +467,13 @@ async function checkUser() {
         class="user-btn"
         onclick="toggleMenu()"
       >
-        👤 ${user.name} ▼
+         ${user.name} ▼
       </button>
 
       <div class="dropdown" id="dropdownMenu">
 
         <a href="/notifications.html">
-          🔔 Уведомления
+           Уведомления
           ${unread > 0
             ? `<span class="badge">${unread}</span>`
             : ""
@@ -481,36 +481,36 @@ async function checkUser() {
         </a>
 
         <a href="/messages.html">
-          💬 Сообщения
+           Сообщения
         </a>
 
         <a href="/favorites.html">
-          ❤️ Избранное
+           Избранное
         </a>
 
         <a href="/add-product.html">
-          ➕ Добавить товар
+           Добавить товар
         </a>
 
         <a href="/my-products.html">
-          📦 Мои товары
+           Мои товары
         </a>
 
         <a href="/profile.html">
-          👤 Личный кабинет
+           Личный кабинет
         </a>
 
         ${user.email === "sobakizomb@gmail.com"
           ? `
           <a href="/admin.html">
-            ⚙️ Админка
+             Админка
           </a>
         `
           : ""
         }
 
         <button onclick="logout()">
-          🚪 Выйти
+           Выйти
         </button>
 
       </div>

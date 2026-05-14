@@ -485,7 +485,7 @@
     <a href="/index.html">Главная</a>
     <a href="/products.html">Товары</a>
     <a href="/cart.html">
-      🛒 Корзина (<span id="cart-count">0</span>)
+       Корзина (<span id="cart-count">0</span>)
     </a>
   </div>
 
@@ -500,7 +500,7 @@
 <section class="page-header">
 
   <h1>
-    📦 <span>Мои товары</span>
+     <span>Мои товары</span>
   </h1>
 
   <p>
@@ -519,7 +519,7 @@
   <div class="modal-content">
 
     <h2>
-      ✏️ Редактировать товар
+       Редактировать товар
     </h2>
 
     <input
@@ -600,7 +600,7 @@
     </select>
 
     <div class="subtitle">
-      ⚙️ Характеристики
+       Характеристики
     </div>
 
     <input
@@ -640,7 +640,7 @@
     </select>
 
     <div class="subtitle">
-      🖼 Новые фото
+       Новые фото
     </div>
 
     <input
@@ -759,13 +759,13 @@ async function checkUser() {
         class="user-btn"
         onclick="toggleMenu()"
       >
-        👤 ${user.name} ▼
+         ${user.name} ▼
       </button>
 
       <div class="dropdown" id="dropdownMenu">
 
         <a href="/notifications.html">
-          🔔 Уведомления
+           Уведомления
           ${unread > 0
             ? `<span class="badge">${unread}</span>`
             : ""
@@ -773,36 +773,36 @@ async function checkUser() {
         </a>
 
         <a href="/messages.html">
-          💬 Сообщения
+           Сообщения
         </a>
 
         <a href="/favorites.html">
-          ❤️ Избранное
+           Избранное
         </a>
 
         <a href="/add-product.html">
-          ➕ Добавить товар
+           Добавить товар
         </a>
 
         <a href="/my-products.html">
-          📦 Мои товары
+           Мои товары
         </a>
 
         <a href="/profile.html">
-          👤 Личный кабинет
+           Личный кабинет
         </a>
 
         ${user.email === "sobakizomb@gmail.com"
           ? `
           <a href="/admin.html">
-            ⚙️ Админка
+             Админка
           </a>
         `
           : ""
         }
 
         <button onclick="logout()">
-          🚪 Выйти
+           Выйти
         </button>
 
       </div>
@@ -1053,7 +1053,7 @@ async function loadProducts() {
 
       container.innerHTML = `
         <div class="empty">
-          📦 У вас пока нет товаров
+           У вас пока нет товаров
         </div>
       `;
 
@@ -1130,7 +1130,7 @@ async function loadProducts() {
             class="btn-card edit-btn"
             onclick='openEdit(${JSON.stringify(product)})'
           >
-            ✏️ Редактировать
+             Редактировать
           </button>
 
           <button
@@ -1140,14 +1140,14 @@ async function loadProducts() {
               '${product.status}'
             )"
           >
-            🔄 Изменить статус
+             Изменить статус
           </button>
 
           <button
             class="btn-card delete-btn"
             onclick="deleteProduct('${product._id}')"
           >
-            🗑 Удалить
+             Удалить
           </button>
 
         </div>
