@@ -187,6 +187,34 @@
       border-radius: 6px;
       cursor: pointer;
     }
+    .toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #111;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,255,204,0.25);
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: 0.3s;
+  z-index: 9999;
+  font-weight: bold;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success {
+  background: #00aa88;
+}
+
+.toast.error {
+  background: crimson;
+}
   </style>
 </head>
 
@@ -214,7 +242,7 @@
 
 <div class="chat-box">
 
-  <h2 id="chatTitle">💬 Чат</h2>
+  <h2 id="chatTitle">Чат</h2>
 
   <div class="product-info" id="productInfo"></div>
 
@@ -237,12 +265,52 @@
 <script>
 const socket = io();
 
-const user =
-  JSON.parse(localStorage.getItem("user"));
+function showToast(message, type = "success") {
+  const toast =
+    document.getElementById("toast");
 
-if (!user) {
-  alert("Сначала войдите");
-  window.location.href = "/login.html";
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+  setTimeout(() => {
+    toast.className =
+      "toast " + type;
+  }, 2500);
+}
+
+function getCurrentUser() {
+  const savedUser =
+    localStorage.getItem("user");
+
+  if (
+    !savedUser ||
+    savedUser === "undefined" ||
+    savedUser === "null"
+  ) {
+    return null;
+  }
+
+  try {
+    const parsed =
+      JSON.parse(savedUser);
+
+    return parsed.user || parsed;
+  } catch {
+    return null;
+  }
+}
+
+const user =
+  getCurrentUser();
+
+if (!user || !user.email) {
+  showToast("Сначала войдите", "error");
+
+  setTimeout(() => {
+    window.location.href = "/login.html";
+  }, 1200);
 }
 
 const params =
@@ -267,7 +335,7 @@ const room =
 socket.emit("joinChat", room);
 
 document.getElementById("chatTitle").textContent =
-  "💬 Чат с " + sellerName;
+  "Чат с " + sellerName;
 
 function updateCartCount() {
   const cart =
@@ -516,6 +584,6 @@ async function start() {
 
 start();
 </script>
-
+<div id="toast" class="toast"></div>
 </body>
 </html>
