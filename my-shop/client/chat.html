@@ -1,49 +1,71 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>Чат</title>
 
   <script src="/socket.io/socket.io.js"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial;
-      background: #f5f5f5;
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #111;
-      padding: 15px 30px;
+      background: #020808;
       color: white;
     }
 
+    .navbar {
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 55px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid rgba(0,255,204,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
     .logo {
-      color: #00ffcc;
-      font-size: 22px;
+      font-size: 30px;
       font-weight: bold;
+      color: white;
+    }
+
+    .logo span {
+      color: #00ffcc;
     }
 
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 35px;
+      align-items: center;
       flex-wrap: wrap;
     }
 
     .nav-links a {
       color: white;
       text-decoration: none;
+      font-size: 17px;
+      padding-bottom: 8px;
     }
 
-    .btn {
+    .nav-links a:hover {
+      color: #00ffcc;
+      border-bottom: 2px solid #00ffcc;
+    }
+
+    .btn,
+    .user-btn {
       background: #00ffcc;
+      color: black;
       border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
+      padding: 12px 20px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
     }
@@ -52,26 +74,17 @@
       position: relative;
     }
 
-    .user-btn {
-      background: #00ffcc;
-      color: black;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
     .dropdown {
       display: none;
       position: absolute;
       right: 0;
-      top: 45px;
-      background: white;
+      top: 50px;
+      background: #081212;
       min-width: 240px;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      box-shadow: 0 0 25px rgba(0,255,204,0.25);
+      border: 1px solid rgba(0,255,204,0.25);
       z-index: 1000;
     }
 
@@ -83,146 +96,335 @@
     .dropdown button {
       display: block;
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       border: none;
-      background: white;
+      background: #081212;
       text-align: left;
       cursor: pointer;
       text-decoration: none;
-      color: black;
+      color: white;
       font-size: 15px;
     }
 
     .dropdown a:hover,
     .dropdown button:hover {
-      background: #f1f1f1;
+      background: #102020;
+      color: #00ffcc;
     }
 
     .badge {
       background: crimson;
       color: white;
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: bold;
       margin-left: 5px;
     }
 
+    .page-header {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 30px 35px;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.22);
+      background:
+        radial-gradient(circle at 80% 50%, rgba(0,255,204,0.18), transparent 35%),
+        linear-gradient(90deg, #020808 0%, #061414 60%, #031010 100%);
+      box-shadow: 0 0 35px rgba(0,255,204,0.08);
+    }
+
+    .page-header h1 {
+      margin: 0;
+      font-size: 38px;
+    }
+
+    .page-header h1 span {
+      color: #00ffcc;
+    }
+
+    .page-header p {
+      color: #bcbcbc;
+      font-size: 17px;
+      margin: 10px 0 0;
+    }
+
     .chat-box {
-      max-width: 800px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 1100px;
+      margin: 25px auto 50px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 22px;
+      padding: 25px;
+      border: 1px solid rgba(0,255,204,0.15);
+      box-shadow: 0 0 35px rgba(0,0,0,0.45);
     }
 
     .product-info {
       display: flex;
-      gap: 15px;
+      gap: 16px;
       align-items: center;
-      background: #f7f7f7;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      background: rgba(255,255,255,0.035);
+      padding: 15px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(0,255,204,0.15);
     }
 
     .product-info img {
-      width: 70px;
-      height: 70px;
+      width: 85px;
+      height: 85px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 12px;
+      background: #081212;
+    }
+
+    .product-info b {
+      color: #00ffcc;
+      font-size: 20px;
+    }
+
+    .product-info p {
+      color: #ccc;
+      margin: 8px 0 0;
+      font-weight: bold;
     }
 
     .messages {
-      height: 550px;
+      height: 560px;
       overflow-y: auto;
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 10px;
-      background: #fafafa;
+      border: 1px solid rgba(0,255,204,0.15);
+      padding: 18px;
+      border-radius: 16px;
+      background: #071111;
+      display: flex;
+      flex-direction: column;
     }
 
     .msg {
-      max-width: 70%;
-      padding: 5px;
-      border-radius: 5px;
-      margin-bottom: 15px;
-      word-wrap: break-word;
-    }
+
+  width: fit-content;
+
+  max-width: 75%;
+
+  padding: 10px 14px;
+
+  border-radius: 18px;
+
+  margin-bottom: 14px;
+
+  word-wrap: break-word;
+
+  line-height: 1.4;
+
+  box-shadow:
+    0 0 15px rgba(0,0,0,0.25);
+
+  display: inline-block;
+}
 
     .my {
-      background: #00ffcc;
-      margin-left: auto;
-    }
 
+  background: #00ffcc;
+
+  color: black;
+
+  margin-left: auto;
+
+  border-bottom-right-radius: 5px;
+
+  display: block;
+}
     .other {
-      background: #e5e5e5;
-      margin-right: auto;
-    }
+
+  background:
+    rgba(255,255,255,0.08);
+
+  color: white;
+
+  margin-right: auto;
+
+  border-bottom-left-radius: 5px;
+
+  border:
+    1px solid rgba(0,255,204,0.12);
+
+  display: block;
+}
 
     .msg b {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      font-size: 14px;
+      opacity: 0.85;
     }
+
+    .msg p {
+
+  margin: 0;
+
+  line-height: 1.45;
+
+  font-size: 15px;
+
+  white-space: pre-wrap;
+}
 
     .send-box {
       display: flex;
-      gap: 10px;
-      margin-top: 15px;
+      gap: 12px;
+      margin-top: 18px;
     }
 
     .send-box input {
       flex: 1;
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,204,0.18);
+      background: #071111;
+      color: white;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .send-box input:focus {
+      border-color: #00ffcc;
+      box-shadow: 0 0 15px rgba(0,255,204,0.18);
     }
 
     .send-box button {
-      padding: 12px 18px;
-      background: black;
-      color: white;
+      padding: 15px 24px;
+      background: #00ffcc;
+      color: black;
       border: none;
-      border-radius: 6px;
+      border-radius: 12px;
       cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
     }
+
     .toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #111;
-  color: white;
-  padding: 14px 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0,255,204,0.25);
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: 0.3s;
-  z-index: 9999;
-  font-weight: bold;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,255,204,0.25);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.3s;
+      z-index: 9999;
+      font-weight: bold;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: #00aa88;
+    }
+
+    .toast.error {
+      background: crimson;
+    }
+
+    @media (max-width: 900px) {
+      .navbar {
+        padding: 15px 20px;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 15px;
+      }
+
+      .page-header,
+      .chat-box {
+        margin: 15px;
+      }
+
+      .page-header h1 {
+        font-size: 30px;
+      }
+
+      .send-box {
+        flex-direction: column;
+      }
+
+      .msg {
+        max-width: 90%;
+      }
+    }
+    ::-webkit-scrollbar {
+  width: 10px;
 }
 
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
+::-webkit-scrollbar-track {
+
+  background:
+    #061111;
+
+  border-radius: 20px;
 }
 
-.toast.success {
-  background: #00aa88;
+::-webkit-scrollbar-thumb {
+
+  background:
+    linear-gradient(
+      180deg,
+      #00ffcc,
+      #00b894
+    );
+
+  border-radius: 20px;
+
+  border:
+    2px solid #061111;
 }
 
-.toast.error {
-  background: crimson;
+::-webkit-scrollbar-thumb:hover {
+
+  background:
+    linear-gradient(
+      180deg,
+      #00ffd5,
+      #00d2a8
+    );
+}
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+
+  background:
+    rgba(0,255,204,0.45);
+
+  border-radius: 20px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+
+  background:
+    rgba(0,255,204,0.75);
 }
   </style>
 </head>
 
 <body>
 
+<div id="toast" class="toast"></div>
+
 <div class="navbar">
 
-  <div class="logo">MY SHOP</div>
+  <div class="logo">
+    MY <span>SHOP</span>
+  </div>
 
   <div class="nav-links">
     <a href="/index.html">Главная</a>
@@ -240,9 +442,16 @@
 
 </div>
 
-<div class="chat-box">
+<section class="page-header">
+  <h1>
+    💬 <span id="chatTitle">Чат</span>
+  </h1>
+  <p>
+    Общение с продавцом по выбранному товару
+  </p>
+</section>
 
-  <h2 id="chatTitle">Чат</h2>
+<div class="chat-box">
 
   <div class="product-info" id="productInfo"></div>
 
@@ -263,162 +472,94 @@
 </div>
 
 <script>
-const socket = io();
+let socket = null;
 
-function showToast(message, type = "success") {
-  const toast =
-    document.getElementById("toast");
-
-  toast.textContent = message;
-
-  toast.className =
-    "toast show " + type;
-
-  setTimeout(() => {
-    toast.className =
-      "toast " + type;
-  }, 2500);
+try {
+  socket = io();
+} catch (e) {
+  console.log("Socket.io не подключился", e);
 }
 
 function getCurrentUser() {
-  const savedUser =
-    localStorage.getItem("user");
+  const savedUser = localStorage.getItem("user");
 
-  if (
-    !savedUser ||
-    savedUser === "undefined" ||
-    savedUser === "null"
-  ) {
+  if (!savedUser || savedUser === "undefined" || savedUser === "null") {
     return null;
   }
 
   try {
-    const parsed =
-      JSON.parse(savedUser);
-
+    const parsed = JSON.parse(savedUser);
     return parsed.user || parsed;
   } catch {
     return null;
   }
 }
 
-const user =
-  getCurrentUser();
-
-if (!user || !user.email) {
-
-  localStorage.removeItem("user");
-
-  window.location.href =
-    "/login.html";
-}
-
-const params =
-  new URLSearchParams(window.location.search);
-
-const productId =
-  params.get("productId");
-
-const sellerEmail =
-  params.get("sellerEmail");
-
-const sellerName =
-  params.get("sellerName") || "Пользователь";
-
-let product = null;
-
-const room =
-  [productId, user.email, sellerEmail]
-    .sort()
-    .join("_");
-
-socket.emit("joinChat", room);
-
-document.getElementById("chatTitle").textContent =
-  "Чат с " + sellerName;
+const user = getCurrentUser();
 
 function updateCartCount() {
-  const cart =
-    JSON.parse(localStorage.getItem("cart")) || [];
-
-  document.getElementById("cart-count")
-    .textContent = cart.length;
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  document.getElementById("cart-count").textContent = cart.length;
 }
 
 async function getUnreadCount() {
-  const res =
-    await fetch("/messages/unread/" + user.email);
+  if (!user || !user.email) return 0;
 
-  const data =
-    await res.json();
-
-  return data.unread || 0;
+  try {
+    const res = await fetch("/messages/unread/" + user.email);
+    const data = await res.json();
+    return data.unread || 0;
+  } catch {
+    return 0;
+  }
 }
 
 async function checkUser() {
-  const block =
-    document.getElementById("user-block");
+  const block = document.getElementById("user-block");
 
-  const unread =
-    await getUnreadCount();
+  if (!block) return;
+
+  if (!user || !user.email) {
+    block.innerHTML = `
+      <a href="/login.html">
+        <button class="btn">Вход</button>
+      </a>
+    `;
+    return;
+  }
+
+  const unread = await getUnreadCount();
 
   block.innerHTML = `
     <div class="user-menu">
-
-      <button
-        class="user-btn"
-        onclick="toggleMenu()"
-      >
-        ${user.name} ▼
+      <button class="user-btn" onclick="toggleMenu()">
+        👤 ${user.name || "Пользователь"} ▼
       </button>
 
       <div class="dropdown" id="dropdownMenu">
-
         <a href="/notifications.html">
           🔔 Уведомления
           ${unread > 0 ? `<span class="badge">${unread}</span>` : ""}
         </a>
 
-        <a href="/messages.html">
-          💬 Сообщения
-        </a>
-
-        <a href="/favorites.html">
-          ❤️ Избранное
-        </a>
-
-        <a href="/add-product.html">
-          ➕ Добавить товар
-        </a>
-
-        <a href="/my-products.html">
-          📦 Мои товары
-        </a>
-
-        <a href="/profile.html">
-          👤 Личный кабинет
-        </a>
+        <a href="/messages.html">💬 Сообщения</a>
+        <a href="/favorites.html">❤️ Избранное</a>
+        <a href="/add-product.html">➕ Добавить товар</a>
+        <a href="/my-products.html">📦 Мои товары</a>
+        <a href="/profile.html">👤 Личный кабинет</a>
 
         ${user.email === "sobakizomb@gmail.com" ? `
-          <a href="/admin.html">
-            ⚙️ Админка
-          </a>
+          <a href="/admin.html">⚙️ Админка</a>
         ` : ""}
 
-        <button onclick="logout()">
-          🚪 Выйти
-        </button>
-
+        <button onclick="logout()">🚪 Выйти</button>
       </div>
-
     </div>
   `;
 }
 
 function toggleMenu() {
-  document
-    .getElementById("dropdownMenu")
-    .classList.toggle("show");
+  document.getElementById("dropdownMenu").classList.toggle("show");
 }
 
 function logout() {
@@ -427,33 +568,33 @@ function logout() {
 }
 
 window.addEventListener("click", function(e) {
-  const menu =
-    document.getElementById("dropdownMenu");
-
-  const btn =
-    document.querySelector(".user-btn");
+  const menu = document.getElementById("dropdownMenu");
+  const btn = document.querySelector(".user-btn");
 
   if (!menu || !btn) return;
 
-  if (
-    !menu.contains(e.target) &&
-    !btn.contains(e.target)
-  ) {
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
     menu.classList.remove("show");
   }
 });
 
-async function loadProduct() {
-  const res =
-    await fetch("/products/" + productId);
+const params = new URLSearchParams(window.location.search);
 
-  product =
-    await res.json();
+const productId = params.get("productId");
+const sellerEmail = params.get("sellerEmail");
+const sellerName = params.get("sellerName") || "Пользователь";
+
+let product = null;
+let room = null;
+
+async function loadProduct() {
+  const res = await fetch("/products/" + productId);
+  product = await res.json();
 
   const img =
-    product.images && product.images.length > 0
-      ? product.images[0]
-      : product.image;
+    product.images?.[0] ||
+    product.image ||
+    "https://placehold.co/100x100?text=No+Image";
 
   document.getElementById("productInfo").innerHTML = `
     <img src="${img}">
@@ -465,15 +606,16 @@ async function loadProduct() {
 }
 
 function renderMessage(m) {
+
   const box =
     document.getElementById("messages");
 
   const isMy =
+    m.sender &&
     m.sender.email === user.email;
 
   box.innerHTML += `
     <div class="msg ${isMy ? "my" : "other"}">
-      <b>${m.sender.name}</b>
       <p>${m.text}</p>
     </div>
   `;
@@ -483,22 +625,16 @@ function renderMessage(m) {
 }
 
 async function loadMessages() {
-  const res =
-    await fetch(
-      `/messages/chat?user1=${user.email}&user2=${sellerEmail}&productId=${productId}`
-    );
+  const res = await fetch(
+    `/messages/chat?user1=${user.email}&user2=${sellerEmail}&productId=${productId}`
+  );
 
-  const messages =
-    await res.json();
+  const messages = await res.json();
 
-  const box =
-    document.getElementById("messages");
-
+  const box = document.getElementById("messages");
   box.innerHTML = "";
 
-  messages.forEach(m => {
-    renderMessage(m);
-  });
+  messages.forEach(m => renderMessage(m));
 
   await fetch("/messages/read", {
     method: "PUT",
@@ -516,11 +652,15 @@ async function loadMessages() {
 }
 
 async function sendMessage() {
-  const input =
-    document.getElementById("messageInput");
+  if (!user || !user.email) {
+    window.location.href = "/login.html";
+    return;
+  }
 
-  const text =
-    input.value.trim();
+  if (!product) return;
+
+  const input = document.getElementById("messageInput");
+  const text = input.value.trim();
 
   if (!text) return;
 
@@ -534,9 +674,9 @@ async function sendMessage() {
       id: product._id,
       title: product.title,
       image:
-        product.images && product.images.length > 0
-          ? product.images[0]
-          : product.image
+        product.images?.[0] ||
+        product.image ||
+        "https://placehold.co/100x100?text=No+Image"
     },
     text
   };
@@ -549,35 +689,57 @@ async function sendMessage() {
     body: JSON.stringify(messageData)
   });
 
+  renderMessage(messageData);
+
+  if (socket) {
   socket.emit("sendMessage", {
     ...messageData,
     room
   });
-
-  input.value = "";
 }
 
-socket.on("newMessage", function(messageData) {
-  renderMessage(messageData);
+input.value = "";
+}
 
-  fetch("/messages/read", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      userEmail: user.email,
-      otherEmail: sellerEmail,
-      productId
-    })
+if (socket) {
+  socket.on("newMessage", function(messageData) {
+    renderMessage(messageData);
+    checkUser();
   });
-
-  checkUser();
-});
+}
 
 async function start() {
   updateCartCount();
   await checkUser();
+
+  if (!user || !user.email) {
+    document.getElementById("messages").innerHTML = `
+      <div style="text-align:center;color:#888;margin-top:40px;font-size:20px;">
+        Сначала войдите в аккаунт
+      </div>
+    `;
+    return;
+  }
+
+  if (!productId || !sellerEmail) {
+    document.getElementById("messages").innerHTML = `
+      <div style="text-align:center;color:#888;margin-top:40px;font-size:20px;">
+        ❌ Чат открыт неправильно<br><br>
+        Откройте чат через кнопку "Написать продавцу"
+      </div>
+    `;
+    return;
+  }
+
+  room = [productId, user.email, sellerEmail].sort().join("_");
+
+  if (socket) {
+    socket.emit("joinChat", room);
+  }
+
+  document.getElementById("chatTitle").textContent =
+    "Чат с " + sellerName;
+
   await loadProduct();
   await loadMessages();
 }
@@ -586,5 +748,5 @@ start();
 </script>
 
 </body>
-<div id="toast" class="toast"></div>
 </html>
+function renderMessage(m)
