@@ -105,7 +105,7 @@ app.post("/register", async (req, res) => {
     });
   }
 });
-// 🔑 ВХОД
+
 app.post("/login", async (req, res) => {
 
   try {
@@ -889,4 +889,3 @@ server.listen(PORT, () => {
     "Сервер запущен на " + PORT
   );
 });
-imageUrl: "/uploads/" + req.file.filename
