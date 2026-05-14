@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Добавить товар</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #020808;
+      color: white;
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,255,204,0.3);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.3s;
+      z-index: 9999;
+      font-weight: bold;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: #00aa88;
+    }
+
+    .toast.error {
+      background: crimson;
+    }
+
+    .navbar {
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 55px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid rgba(0,255,204,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .logo span {
+      color: #00ffcc;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 17px;
+      padding-bottom: 8px;
+    }
+
+    .nav-links a:hover {
+      color: #00ffcc;
+      border-bottom: 2px solid #00ffcc;
+    }
+
+    .btn,
+    .user-btn {
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #081212;
+      min-width: 240px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,255,204,0.25);
+      border: 1px solid rgba(0,255,204,0.25);
+      z-index: 1000;
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a,
+    .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      background: #081212;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+    }
+
+    .dropdown a:hover,
+    .dropdown button:hover {
+      background: #102020;
+      color: #00ffcc;
+    }
+
+    .badge {
+      background: crimson;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.03);
+      padding: 30px;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.15);
+      box-shadow: 0 0 35px rgba(0,0,0,0.45);
+    }
+
+    .container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 38px;
+    }
+
+    .container input,
+    .container textarea,
+    .container select {
+
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 1px solid rgba(0,255,204,0.18);
+      background: #071111;
+      color: white;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .container input:focus,
+    .container textarea:focus,
+    .container select:focus {
+
+      border-color: #00ffcc;
+
+      box-shadow:
+        0 0 15px rgba(0,255,204,0.18);
+    }
+
+    .container button {
+
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
+      background: #00ffcc;
+      color: black;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .container button:hover {
+      transform: scale(1.02);
+    }
+
+    .subtitle {
+      margin-top: 30px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+
+    .gallery-preview {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .gallery-preview img {
+
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 2px solid rgba(0,255,204,0.18);
+
+      box-shadow:
+        0 0 15px rgba(0,255,204,0.15);
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #888;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px) {
+
+      .navbar {
+        padding: 15px 20px;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 15px;
+      }
+
+      .container {
+        margin: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <div class="logo">
+    MY <span>SHOP</span>
+  </div>
+
+  <div class="nav-links">
+    <a href="/index.html">Главная</a>
+    <a href="/products.html">Товары</a>
+    <a href="/cart.html">
+      🛒 Корзина (<span id="cart-count">0</span>)
+    </a>
+  </div>
+
+  <div id="user-block">
+    <a href="/login.html">
+      <button class="btn">Вход</button>
+    </a>
+  </div>
+
+</div>
+
+<div class="container">
+
+  <h2>➕ Добавить товар</h2>
+
+  <input
+    type="text"
+    id="title"
+    placeholder="Название товара"
+  >
+
+  <input
+    type="number"
+    id="price"
+    placeholder="Цена"
+  >
+
+  <textarea
+    id="description"
+    placeholder="Описание"
+  ></textarea>
+
+  <select id="category">
+    <option value="Телефоны">Телефоны</option>
+    <option value="Ноутбуки">Ноутбуки</option>
+    <option value="Игры">Игры</option>
+    <option value="Одежда">Одежда</option>
+    <option value="Другое">Другое</option>
+  </select>
+
+  <select id="city">
+    <option value="Алматы">Алматы</option>
+    <option value="Астана">Астана</option>
+    <option value="Шымкент">Шымкент</option>
+    <option value="Караганда">Караганда</option>
+    <option value="Другое">Другое</option>
+  </select>
+
+  <select id="status">
+    <option value="В наличии">🟢 В наличии</option>
+    <option value="Продано">🔴 Продано</option>
+  </select>
+
+  <div class="subtitle">
+    ⚙️ Характеристики
+  </div>
+
+  <input type="text" id="article" placeholder="Артикул">
+  <input type="text" id="brand" placeholder="Бренд">
+  <input type="text" id="color" placeholder="Цвет">
+  <input type="text" id="size" placeholder="Размер">
+
+  <select id="condition">
+    <option value="Новое">Новое</option>
+    <option value="Б/У">Б/У</option>
+  </select>
+
+  <div class="subtitle">
+    🖼 Фото товара
+  </div>
+
+  <input
+    type="file"
+    id="imageFiles"
+    accept="image/*"
+    multiple
+  >
+
+  <div class="hint">
+    Можно выбрать до 5 фото.
+    Первое фото будет главным.
+  </div>
+
+  <div
+    class="gallery-preview"
+    id="galleryPreview"
+  ></div>
+
+  <button onclick="addProduct()">
+    Добавить товар
+  </button>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+let selectedFiles = [];
+
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+  setTimeout(() => {
+
+    toast.className =
+      "toast " + type;
+
+  }, 2500);
+}
+
+function updateCartCount() {
+
+  const cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  document.getElementById("cart-count")
+    .textContent = cart.length;
+}
+
+async function checkUser() {
+
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  const block =
+    document.getElementById("user-block");
+
+  if (!user || !block) return;
+
+  let unread = 0;
+
+  try {
+
+    const res =
+      await fetch("/messages/unread/" + user.email);
+
+    const data =
+      await res.json();
+
+    unread =
+      data.unread || 0;
+
+  } catch {}
+
+  block.innerHTML = `
+    <div class="user-menu">
+
+      <button
+        class="user-btn"
+        onclick="toggleMenu()"
+      >
+        👤 ${user.name} ▼
+      </button>
+
+      <div class="dropdown" id="dropdownMenu">
+
+        <a href="/notifications.html">
+          🔔 Уведомления
+          ${unread > 0
+            ? `<span class="badge">${unread}</span>`
+            : ""
+          }
+        </a>
+
+        <a href="/messages.html">
+          💬 Сообщения
+        </a>
+
+        <a href="/favorites.html">
+          ❤️ Избранное
+        </a>
+
+        <a href="/add-product.html">
+          ➕ Добавить товар
+        </a>
+
+        <a href="/my-products.html">
+          📦 Мои товары
+        </a>
+
+        <a href="/profile.html">
+          👤 Личный кабинет
+        </a>
+
+        ${user.email === "sobakizomb@gmail.com"
+          ? `
+          <a href="/admin.html">
+            ⚙️ Админка
+          </a>
+        `
+          : ""
+        }
+
+        <button onclick="logout()">
+          🚪 Выйти
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function toggleMenu() {
+
+  document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+}
+
+function logout() {
+
+  localStorage.removeItem("user");
+
+  window.location.href =
+    "/login.html";
+}
+
+window.addEventListener("click", function(e) {
+
+  const menu =
+    document.getElementById("dropdownMenu");
+
+  const btn =
+    document.querySelector(".user-btn");
+
+  if (!menu || !btn) return;
+
+  if (
+    !menu.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
+    menu.classList.remove("show");
+  }
+});
+
+document
+  .getElementById("imageFiles")
+  .addEventListener("change", function(e) {
+
+    selectedFiles =
+      Array.from(e.target.files).slice(0, 5);
+
+    const preview =
+      document.getElementById("galleryPreview");
+
+    preview.innerHTML = "";
+
+    selectedFiles.forEach(file => {
+
+      const reader =
+        new FileReader();
+
+      reader.onload = function(event) {
+
+        preview.innerHTML += `
+          <img src="${event.target.result}">
+        `;
+      };
+
+      reader.readAsDataURL(file);
+    });
+  });
+
+async function uploadImages(files) {
+
+  const uploadedImages = [];
+
+  for (const file of files) {
+
+    const formData =
+      new FormData();
+
+    formData.append("image", file);
+
+    const uploadRes =
+      await fetch("/upload", {
+
+        method: "POST",
+        body: formData
+      });
+
+    const uploadData =
+      await uploadRes.json();
+
+    uploadedImages.push(
+      uploadData.imageUrl
+    );
+  }
+
+  return uploadedImages;
+}
+
+async function addProduct() {
+
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+
+    showToast(
+      "Сначала войдите",
+      "error"
+    );
+
+    setTimeout(() => {
+
+      window.location.href =
+        "/login.html";
+
+    }, 1200);
+
+    return;
+  }
+
+  const title =
+    document.getElementById("title").value;
+
+  const price =
+    document.getElementById("price").value;
+
+  const description =
+    document.getElementById("description").value;
+
+  const category =
+    document.getElementById("category").value;
+
+  const city =
+    document.getElementById("city").value;
+
+  const status =
+    document.getElementById("status").value;
+
+  const article =
+    document.getElementById("article").value;
+
+  const brand =
+    document.getElementById("brand").value;
+
+  const color =
+    document.getElementById("color").value;
+
+  const size =
+    document.getElementById("size").value;
+
+  const condition =
+    document.getElementById("condition").value;
+
+  if (
+    !title ||
+    !price ||
+    !description ||
+    selectedFiles.length === 0
+  ) {
+
+    showToast(
+      "Заполните все поля и выберите фото",
+      "error"
+    );
+
+    return;
+  }
+
+  try {
+
+    const images =
+      await uploadImages(selectedFiles);
+
+    const res =
+      await fetch("/add-product", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+          title,
+          price,
+          description,
+          images,
+          category,
+          city,
+          status,
+          article,
+          brand,
+          color,
+          size,
+          condition,
+          user
+        })
+      });
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      showToast(
+        data.message || "Ошибка",
+        "error"
+      );
+
+      return;
+    }
+
+    showToast(
+      "Товар добавлен",
+      "success"
+    );
+
+    setTimeout(() => {
+
+      window.location.href =
+        "/my-products.html";
+
+    }, 1200);
+
+  } catch {
+
+    showToast(
+      "Ошибка сервера",
+      "error"
+    );
+  }
+}
+
+updateCartCount();
+checkUser();
+
+</script>
+
+</body>
+</html>

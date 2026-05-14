@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Сообщения</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #020808;
+      color: white;
+    }
+
+    .navbar {
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 55px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid rgba(0,255,204,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .logo span {
+      color: #00ffcc;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 17px;
+      padding-bottom: 8px;
+    }
+
+    .nav-links a:hover {
+      color: #00ffcc;
+      border-bottom: 2px solid #00ffcc;
+    }
+
+    .btn,
+    .user-btn {
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #081212;
+      min-width: 240px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,255,204,0.25);
+      border: 1px solid rgba(0,255,204,0.25);
+      z-index: 1000;
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a,
+    .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      background: #081212;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+    }
+
+    .dropdown a:hover,
+    .dropdown button:hover {
+      background: #102020;
+      color: #00ffcc;
+    }
+
+    .badge {
+      background: crimson;
+      color: white;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .page-header {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 35px 40px;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.22);
+      background:
+        radial-gradient(circle at 80% 50%, rgba(0,255,204,0.18), transparent 35%),
+        linear-gradient(90deg, #020808 0%, #061414 60%, #031010 100%);
+      box-shadow: 0 0 35px rgba(0,255,204,0.08);
+    }
+
+    .page-header h1 {
+      margin: 0;
+      font-size: 44px;
+    }
+
+    .page-header h1 span {
+      color: #00ffcc;
+    }
+
+    .page-header p {
+      color: #bcbcbc;
+      font-size: 18px;
+      margin: 12px 0 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 25px auto;
+      background: rgba(255,255,255,0.03);
+      padding: 25px;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.15);
+      box-shadow: 0 0 35px rgba(0,0,0,0.45);
+    }
+
+    .dialog {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      border: 1px solid rgba(0,255,204,0.16);
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 15px;
+      background: rgba(255,255,255,0.035);
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .dialog:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,255,204,0.45);
+      box-shadow: 0 0 25px rgba(0,255,204,0.18);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .dialog img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #081212;
+      border: 1px solid rgba(0,255,204,0.2);
+    }
+
+    .dialog-info {
+      flex: 1;
+    }
+
+    .dialog-info h3 {
+      margin: 0 0 8px;
+      color: #00ffcc;
+      font-size: 21px;
+    }
+
+    .dialog-info p {
+      margin: 7px 0;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .last-message {
+      color: white;
+      font-weight: bold;
+    }
+
+    .date {
+      color: #888;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #888;
+      padding: 70px 20px;
+      font-size: 22px;
+    }
+
+    .empty span {
+      display: block;
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,255,204,0.3);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.3s;
+      z-index: 9999;
+      font-weight: bold;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: #00aa88;
+    }
+
+    .toast.error {
+      background: crimson;
+    }
+
+    @media (max-width: 900px) {
+
+      .navbar {
+        padding: 15px 20px;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 15px;
+      }
+
+      .page-header,
+      .container {
+        margin: 15px;
+      }
+
+      .page-header h1 {
+        font-size: 34px;
+      }
+
+      .dialog {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .dialog img {
+        width: 100%;
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <div class="logo">
+    MY <span>SHOP</span>
+  </div>
+
+  <div class="nav-links">
+    <a href="/index.html">Главная</a>
+    <a href="/products.html">Товары</a>
+    <a href="/cart.html">
+      🛒 Корзина (<span id="cart-count">0</span>)
+    </a>
+  </div>
+
+  <div id="user-block">
+    <a href="/login.html">
+      <button class="btn">Вход</button>
+    </a>
+  </div>
+
+</div>
+
+<section class="page-header">
+
+  <h1>
+    💬 <span>Сообщения</span>
+  </h1>
+
+  <p>
+    Все ваши диалоги с продавцами и покупателями
+  </p>
+
+</section>
+
+<div class="container">
+
+  <div id="dialogs"></div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+const user =
+  JSON.parse(localStorage.getItem("user"));
+
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+  setTimeout(() => {
+
+    toast.className =
+      "toast " + type;
+
+  }, 2500);
+}
+
+if (!user) {
+
+  showToast(
+    "Сначала войдите",
+    "error"
+  );
+
+  setTimeout(() => {
+    window.location.href = "/login.html";
+  }, 1200);
+}
+
+function updateCartCount() {
+
+  const cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  document.getElementById("cart-count")
+    .textContent = cart.length;
+}
+
+async function getUnreadCount() {
+
+  if (!user) return 0;
+
+  const res =
+    await fetch("/messages/unread/" + user.email);
+
+  const data =
+    await res.json();
+
+  return data.unread || 0;
+}
+
+async function checkUser() {
+
+  const block =
+    document.getElementById("user-block");
+
+  if (!user || !block) return;
+
+  const unread =
+    await getUnreadCount();
+
+  block.innerHTML = `
+    <div class="user-menu">
+
+      <button
+        class="user-btn"
+        onclick="toggleMenu()"
+      >
+         ${user.name} ▼
+      </button>
+
+      <div class="dropdown" id="dropdownMenu">
+
+        <a href="/notifications.html">
+          🔔 Уведомления
+          ${unread > 0
+            ? `<span class="badge">${unread}</span>`
+            : ""
+          }
+        </a>
+
+        <a href="/messages.html">
+          💬 Сообщения
+        </a>
+
+        <a href="/favorites.html">
+          ❤️ Избранное
+        </a>
+
+        <a href="/add-product.html">
+          ➕ Добавить товар
+        </a>
+
+        <a href="/my-products.html">
+          📦 Мои товары
+        </a>
+
+        <a href="/profile.html">
+          👤 Личный кабинет
+        </a>
+
+        ${user.email === "sobakizomb@gmail.com" ? `
+          <a href="/admin.html">
+            ⚙️ Админка
+          </a>
+        ` : ""}
+
+        <button onclick="logout()">
+          🚪 Выйти
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function toggleMenu() {
+
+  document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+}
+
+function logout() {
+
+  localStorage.removeItem("user");
+
+  window.location.href =
+    "/login.html";
+}
+
+window.addEventListener("click", function(e) {
+
+  const menu =
+    document.getElementById("dropdownMenu");
+
+  const btn =
+    document.querySelector(".user-btn");
+
+  if (!menu || !btn) return;
+
+  if (
+    !menu.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
+    menu.classList.remove("show");
+  }
+});
+
+async function loadDialogs() {
+
+  const res =
+    await fetch("/messages/dialogs/" + user.email);
+
+  const dialogs =
+    await res.json();
+
+  const container =
+    document.getElementById("dialogs");
+
+  container.innerHTML = "";
+
+  if (dialogs.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty">
+        <span>💬</span>
+        У вас пока нет сообщений
+      </div>
+    `;
+
+    return;
+  }
+
+  dialogs.forEach(d => {
+
+    const date =
+      new Date(d.lastDate)
+        .toLocaleString();
+
+    container.innerHTML += `
+
+      <div
+        class="dialog"
+        onclick="openDialog(
+          '${d.product.id}',
+          '${d.otherUser.email}',
+          '${d.otherUser.name}'
+        )"
+      >
+
+        <img src="${d.product.image}">
+
+        <div class="dialog-info">
+
+          <h3>
+            ${d.otherUser.name}
+          </h3>
+
+          <p>
+            📦 Товар:
+            <b>${d.product.title}</b>
+          </p>
+
+          <p class="last-message">
+            💬 ${d.lastMessage}
+          </p>
+
+          <div class="date">
+            ${date}
+          </div>
+
+        </div>
+
+        ${d.unread > 0
+          ? `<div class="badge">${d.unread}</div>`
+          : ""
+        }
+
+      </div>
+    `;
+  });
+}
+
+function openDialog(
+  productId,
+  otherEmail,
+  otherName
+) {
+
+  window.location.href =
+    `/chat.html?productId=${productId}&sellerEmail=${otherEmail}&sellerName=${otherName}`;
+}
+
+updateCartCount();
+checkUser();
+loadDialogs();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Вход</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background:
+        radial-gradient(circle at top right,
+          rgba(0,255,204,0.15),
+          transparent 30%),
+        linear-gradient(135deg,
+          #020808 0%,
+          #031010 40%,
+          #071818 100%);
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bg-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: rgba(0,255,204,0.08);
+      filter: blur(120px);
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .bg1 {
+      top: -150px;
+      right: -100px;
+    }
+
+    .bg2 {
+      bottom: -180px;
+      left: -120px;
+    }
+
+    .login-box {
+      width: 430px;
+      position: relative;
+      z-index: 2;
+
+      background:
+        rgba(255,255,255,0.04);
+
+      backdrop-filter: blur(14px);
+
+      border:
+        1px solid rgba(0,255,204,0.15);
+
+      border-radius: 28px;
+
+      padding: 40px;
+
+      box-shadow:
+        0 0 40px rgba(0,0,0,0.45);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .logo span {
+      color: #00ffcc;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 35px;
+      font-size: 16px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-group input {
+
+      width: 100%;
+
+      padding:
+        16px 16px 16px 50px;
+
+      border-radius: 14px;
+
+      border:
+        1px solid rgba(0,255,204,0.14);
+
+      background:
+        rgba(255,255,255,0.03);
+
+      color: white;
+
+      font-size: 15px;
+
+      outline: none;
+
+      transition: 0.25s;
+    }
+
+    .input-group input:focus {
+
+      border-color: #00ffcc;
+
+      box-shadow:
+        0 0 20px rgba(0,255,204,0.12);
+    }
+
+    .icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #00ffcc;
+    }
+
+    .login-btn {
+
+      width: 100%;
+
+      padding: 15px;
+
+      margin-top: 10px;
+
+      border: none;
+
+      border-radius: 14px;
+
+      background: #00ffcc;
+
+      color: black;
+
+      font-size: 17px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      transition: 0.25s;
+    }
+
+    .login-btn:hover {
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 0 25px rgba(0,255,204,0.35);
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 25px;
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    .register-link a {
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,255,204,0.25);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.3s;
+      z-index: 9999;
+      font-weight: bold;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: #00aa88;
+    }
+
+    .toast.error {
+      background: crimson;
+    }
+
+    @media (max-width: 500px) {
+
+      .login-box {
+        width: 92%;
+        padding: 30px 25px;
+      }
+
+      .logo {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="bg-glow bg1"></div>
+<div class="bg-glow bg2"></div>
+
+<div class="login-box">
+
+  <div class="logo">
+    MY <span>SHOP</span>
+  </div>
+
+  <div class="subtitle">
+    Войдите в свой аккаунт
+  </div>
+
+  <form onsubmit="login(event)">
+
+    <div class="input-group">
+
+      <span class="icon">
+        
+      </span>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Введите email"
+        required
+      >
+
+    </div>
+
+    <div class="input-group">
+
+      <span class="icon">
+        
+      </span>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Введите пароль"
+        required
+      >
+
+    </div>
+
+    <button
+      type="submit"
+      class="login-btn"
+    >
+      Войти
+    </button>
+
+  </form>
+
+  <div class="register-link">
+    Нет аккаунта?
+    <a href="/register.html">
+      Зарегистрироваться
+    </a>
+  </div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+  setTimeout(() => {
+
+    toast.className =
+      "toast " + type;
+
+  }, 2500);
+}
+
+async function login(event) {
+
+  event.preventDefault();
+
+  const email =
+    document.getElementById("email").value;
+
+  const password =
+    document.getElementById("password").value;
+
+  try {
+
+    const res =
+      await fetch("/login", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      showToast(
+        data.message || "Ошибка входа",
+        "error"
+      );
+
+      return;
+    }
+
+    localStorage.setItem(
+  "user",
+  JSON.stringify(data)
+);
+
+    showToast(
+      "Вход выполнен",
+      "success"
+    );
+
+    setTimeout(() => {
+
+      window.location.href =
+        "/index.html";
+
+    }, 1200);
+
+  } catch {
+
+    showToast(
+      "Ошибка сервера",
+      "error"
+    );
+  }
+}
+
+</script>
+
+</body>
+</html>

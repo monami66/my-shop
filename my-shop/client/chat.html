@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Чат</title>
+
+  <script src="/socket.io/socket.io.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #f5f5f5;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      padding: 15px 30px;
+      color: white;
+    }
+
+    .logo {
+      color: #00ffcc;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn {
+      background: #00ffcc;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .user-btn {
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 45px;
+      background: white;
+      min-width: 240px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a,
+    .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: white;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      color: black;
+      font-size: 15px;
+    }
+
+    .dropdown a:hover,
+    .dropdown button:hover {
+      background: #f1f1f1;
+    }
+
+    .badge {
+      background: crimson;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .chat-box {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .product-info {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      background: #f7f7f7;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .product-info img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .messages {
+      height: 550px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+
+    .msg {
+      max-width: 70%;
+      padding: 5px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      word-wrap: break-word;
+    }
+
+    .my {
+      background: #00ffcc;
+      margin-left: auto;
+    }
+
+    .other {
+      background: #e5e5e5;
+      margin-right: auto;
+    }
+
+    .msg b {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .send-box {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .send-box input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .send-box button {
+      padding: 12px 18px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <div class="logo">MY SHOP</div>
+
+  <div class="nav-links">
+    <a href="/index.html">Главная</a>
+    <a href="/products.html">Товары</a>
+    <a href="/cart.html">
+      🛒 Корзина (<span id="cart-count">0</span>)
+    </a>
+  </div>
+
+  <div id="user-block">
+    <a href="/login.html">
+      <button class="btn">Вход</button>
+    </a>
+  </div>
+
+</div>
+
+<div class="chat-box">
+
+  <h2 id="chatTitle">💬 Чат</h2>
+
+  <div class="product-info" id="productInfo"></div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="send-box">
+    <input
+      id="messageInput"
+      placeholder="Введите сообщение..."
+      onkeydown="if(event.key === 'Enter') sendMessage()"
+    >
+
+    <button onclick="sendMessage()">
+      Отправить
+    </button>
+  </div>
+
+</div>
+
+<script>
+const socket = io();
+
+const user =
+  JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+  alert("Сначала войдите");
+  window.location.href = "/login.html";
+}
+
+const params =
+  new URLSearchParams(window.location.search);
+
+const productId =
+  params.get("productId");
+
+const sellerEmail =
+  params.get("sellerEmail");
+
+const sellerName =
+  params.get("sellerName") || "Пользователь";
+
+let product = null;
+
+const room =
+  [productId, user.email, sellerEmail]
+    .sort()
+    .join("_");
+
+socket.emit("joinChat", room);
+
+document.getElementById("chatTitle").textContent =
+  "💬 Чат с " + sellerName;
+
+function updateCartCount() {
+  const cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  document.getElementById("cart-count")
+    .textContent = cart.length;
+}
+
+async function getUnreadCount() {
+  const res =
+    await fetch("/messages/unread/" + user.email);
+
+  const data =
+    await res.json();
+
+  return data.unread || 0;
+}
+
+async function checkUser() {
+  const block =
+    document.getElementById("user-block");
+
+  const unread =
+    await getUnreadCount();
+
+  block.innerHTML = `
+    <div class="user-menu">
+
+      <button
+        class="user-btn"
+        onclick="toggleMenu()"
+      >
+        ${user.name} ▼
+      </button>
+
+      <div class="dropdown" id="dropdownMenu">
+
+        <a href="/notifications.html">
+          🔔 Уведомления
+          ${unread > 0 ? `<span class="badge">${unread}</span>` : ""}
+        </a>
+
+        <a href="/messages.html">
+          💬 Сообщения
+        </a>
+
+        <a href="/favorites.html">
+          ❤️ Избранное
+        </a>
+
+        <a href="/add-product.html">
+          ➕ Добавить товар
+        </a>
+
+        <a href="/my-products.html">
+          📦 Мои товары
+        </a>
+
+        <a href="/profile.html">
+          👤 Личный кабинет
+        </a>
+
+        ${user.email === "sobakizomb@gmail.com" ? `
+          <a href="/admin.html">
+            ⚙️ Админка
+          </a>
+        ` : ""}
+
+        <button onclick="logout()">
+          🚪 Выйти
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function toggleMenu() {
+  document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "/login.html";
+}
+
+window.addEventListener("click", function(e) {
+  const menu =
+    document.getElementById("dropdownMenu");
+
+  const btn =
+    document.querySelector(".user-btn");
+
+  if (!menu || !btn) return;
+
+  if (
+    !menu.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
+    menu.classList.remove("show");
+  }
+});
+
+async function loadProduct() {
+  const res =
+    await fetch("/products/" + productId);
+
+  product =
+    await res.json();
+
+  const img =
+    product.images && product.images.length > 0
+      ? product.images[0]
+      : product.image;
+
+  document.getElementById("productInfo").innerHTML = `
+    <img src="${img}">
+    <div>
+      <b>${product.title}</b>
+      <p>${product.price} ₸</p>
+    </div>
+  `;
+}
+
+function renderMessage(m) {
+  const box =
+    document.getElementById("messages");
+
+  const isMy =
+    m.sender.email === user.email;
+
+  box.innerHTML += `
+    <div class="msg ${isMy ? "my" : "other"}">
+      <b>${m.sender.name}</b>
+      <p>${m.text}</p>
+    </div>
+  `;
+
+  box.scrollTop =
+    box.scrollHeight;
+}
+
+async function loadMessages() {
+  const res =
+    await fetch(
+      `/messages/chat?user1=${user.email}&user2=${sellerEmail}&productId=${productId}`
+    );
+
+  const messages =
+    await res.json();
+
+  const box =
+    document.getElementById("messages");
+
+  box.innerHTML = "";
+
+  messages.forEach(m => {
+    renderMessage(m);
+  });
+
+  await fetch("/messages/read", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userEmail: user.email,
+      otherEmail: sellerEmail,
+      productId
+    })
+  });
+
+  checkUser();
+}
+
+async function sendMessage() {
+  const input =
+    document.getElementById("messageInput");
+
+  const text =
+    input.value.trim();
+
+  if (!text) return;
+
+  const messageData = {
+    sender: user,
+    receiver: {
+      name: sellerName,
+      email: sellerEmail
+    },
+    product: {
+      id: product._id,
+      title: product.title,
+      image:
+        product.images && product.images.length > 0
+          ? product.images[0]
+          : product.image
+    },
+    text
+  };
+
+  await fetch("/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(messageData)
+  });
+
+  socket.emit("sendMessage", {
+    ...messageData,
+    room
+  });
+
+  input.value = "";
+}
+
+socket.on("newMessage", function(messageData) {
+  renderMessage(messageData);
+
+  fetch("/messages/read", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userEmail: user.email,
+      otherEmail: sellerEmail,
+      productId
+    })
+  });
+
+  checkUser();
+});
+
+async function start() {
+  updateCartCount();
+  await checkUser();
+  await loadProduct();
+  await loadMessages();
+}
+
+start();
+</script>
+
+</body>
+</html>

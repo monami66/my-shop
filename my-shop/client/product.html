@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Товар</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #020808;
+      color: white;
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,255,204,0.3);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.3s;
+      z-index: 9999;
+      font-weight: bold;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: #00aa88;
+    }
+
+    .toast.error {
+      background: crimson;
+    }
+
+    .navbar {
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 55px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid rgba(0,255,204,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .logo span {
+      color: #00ffcc;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 17px;
+      padding-bottom: 8px;
+    }
+
+    .nav-links a:hover {
+      color: #00ffcc;
+      border-bottom: 2px solid #00ffcc;
+    }
+
+    .btn,
+    .user-btn {
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #081212;
+      min-width: 240px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,255,204,0.25);
+      border: 1px solid rgba(0,255,204,0.25);
+      z-index: 1000;
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a,
+    .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      background: #081212;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+    }
+
+    .dropdown a:hover,
+    .dropdown button:hover {
+      background: #102020;
+      color: #00ffcc;
+    }
+
+    .badge {
+      background: crimson;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .product {
+      max-width: 1350px;
+      margin: 30px auto;
+      background: rgba(255,255,255,0.03);
+      border-radius: 22px;
+      padding: 30px;
+      display: flex;
+      gap: 35px;
+      flex-wrap: wrap;
+      border: 1px solid rgba(0,255,204,0.15);
+      box-shadow: 0 0 35px rgba(0,0,0,0.45);
+    }
+
+    .gallery {
+      width: 520px;
+      max-width: 100%;
+    }
+
+    .main-photo {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid rgba(0,255,204,0.15);
+      background: #081212;
+    }
+
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .thumb {
+      width: 85px;
+      height: 85px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .thumb:hover,
+    .thumb.active {
+      border-color: #00ffcc;
+      box-shadow: 0 0 15px rgba(0,255,204,0.35);
+    }
+
+    .info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .info h1 {
+      font-size: 38px;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .info p {
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    .price {
+      font-size: 42px;
+      color: #00ffcc;
+      font-weight: bold;
+      margin: 18px 0;
+    }
+
+    .buy-btn,
+    .fav-btn,
+    .chat-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 12px;
+      font-size: 17px;
+      transition: 0.2s;
+    }
+
+    .buy-btn {
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+    }
+
+    .fav-btn {
+      background: crimson;
+      color: white;
+    }
+
+    .chat-btn {
+      background: rgba(255,255,255,0.08);
+      color: #00ffcc;
+      border: 1px solid rgba(0,255,204,0.25);
+    }
+
+    .buy-btn:hover,
+    .fav-btn:hover,
+    .chat-btn:hover {
+      transform: scale(1.02);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 20px;
+      color: white;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .available {
+      background: #008866;
+    }
+
+    .sold {
+      background: crimson;
+    }
+
+    .specs {
+      margin-top: 25px;
+      background: rgba(255,255,255,0.03);
+      padding: 18px;
+      border-radius: 15px;
+      border: 1px solid rgba(0,255,204,0.12);
+    }
+
+    .specs h3 {
+      margin-top: 0;
+      color: #00ffcc;
+    }
+
+    .spec-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      color: #ccc;
+    }
+
+    .spec-item:last-child {
+      border-bottom: none;
+    }
+
+    .reviews {
+      max-width: 1350px;
+      margin: 20px auto;
+      background: rgba(255,255,255,0.03);
+      padding: 25px;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.15);
+    }
+
+    .reviews h2 {
+      color: #00ffcc;
+      margin-top: 0;
+    }
+
+    .review {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 12px 0;
+      color: #ddd;
+    }
+
+    .review:last-child {
+      border-bottom: none;
+    }
+
+    .reviews textarea,
+    .reviews select {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 1px solid rgba(0,255,204,0.18);
+      background: #071111;
+      color: white;
+      outline: none;
+    }
+
+    .reviews textarea:focus,
+    .reviews select:focus {
+      border-color: #00ffcc;
+      box-shadow: 0 0 15px rgba(0,255,204,0.18);
+    }
+
+    .reviews button {
+      margin-top: 15px;
+      padding: 14px;
+      width: 100%;
+      background: #00ffcc;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .navbar {
+        padding: 15px 20px;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 15px;
+      }
+
+      .product,
+      .reviews {
+        margin: 15px;
+      }
+
+      .main-photo {
+        height: 360px;
+      }
+
+      .info h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <div class="logo">
+    MY <span>SHOP</span>
+  </div>
+
+  <div class="nav-links">
+    <a href="/index.html">Главная</a>
+    <a href="/products.html">Товары</a>
+    <a href="/cart.html">
+      🛒 Корзина (<span id="cart-count">0</span>)
+    </a>
+  </div>
+
+  <div id="user-block">
+    <a href="/login.html">
+      <button class="btn">Вход</button>
+    </a>
+  </div>
+
+</div>
+
+<div class="product" id="product"></div>
+
+<div class="reviews">
+
+  <h2>Отзывы</h2>
+
+  <div id="reviewsList"></div>
+
+  <textarea
+    id="reviewText"
+    placeholder="Ваш отзыв"
+  ></textarea>
+
+  <select id="rating">
+    <option value="5">⭐⭐⭐⭐⭐</option>
+    <option value="4">⭐⭐⭐⭐</option>
+    <option value="3">⭐⭐⭐</option>
+    <option value="2">⭐⭐</option>
+    <option value="1">⭐</option>
+  </select>
+
+  <button onclick="addReview()">
+    Добавить отзыв
+  </button>
+
+</div>
+
+<script>
+
+let productId = "";
+
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+  setTimeout(() => {
+
+    toast.className =
+      "toast " + type;
+
+  }, 2500);
+}
+
+function updateCartCount() {
+  const cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  document.getElementById("cart-count")
+    .textContent = cart.length;
+}
+
+async function checkUser() {
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  const block =
+    document.getElementById("user-block");
+
+  if (!user || !block) return;
+
+  const res =
+    await fetch("/messages/unread/" + user.email);
+
+  const data =
+    await res.json();
+
+  const unread =
+    data.unread || 0;
+
+  block.innerHTML = `
+    <div class="user-menu">
+
+      <button
+        class="user-btn"
+        onclick="toggleMenu()"
+      >
+         ${user.name} ▼
+      </button>
+
+      <div class="dropdown" id="dropdownMenu">
+
+        <a href="/notifications.html">
+          🔔 Уведомления
+          ${unread > 0 ? `<span class="badge">${unread}</span>` : ""}
+        </a>
+
+        <a href="/messages.html">
+          💬 Сообщения
+        </a>
+
+        <a href="/favorites.html">
+          ❤️ Избранное
+        </a>
+
+        <a href="/add-product.html">
+          ➕ Добавить товар
+        </a>
+
+        <a href="/my-products.html">
+          📦 Мои товары
+        </a>
+
+        <a href="/profile.html">
+          👤 Личный кабинет
+        </a>
+
+        ${user.email === "sobakizomb@gmail.com" ? `
+          <a href="/admin.html">
+            ⚙️ Админка
+          </a>
+        ` : ""}
+
+        <button onclick="logout()">
+          🚪 Выйти
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function toggleMenu() {
+  document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "/login.html";
+}
+
+window.addEventListener("click", function(e) {
+  const menu =
+    document.getElementById("dropdownMenu");
+
+  const btn =
+    document.querySelector(".user-btn");
+
+  if (!menu || !btn) return;
+
+  if (
+    !menu.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
+    menu.classList.remove("show");
+  }
+});
+
+function changeMainPhoto(src, el) {
+  document.getElementById("mainPhoto").src = src;
+
+  document
+    .querySelectorAll(".thumb")
+    .forEach(img => img.classList.remove("active"));
+
+  el.classList.add("active");
+}
+
+async function loadProduct() {
+  const params =
+    new URLSearchParams(window.location.search);
+
+  productId = params.get("id");
+
+  const res =
+    await fetch("/products/" + productId);
+
+  const p =
+    await res.json();
+
+  const container =
+    document.getElementById("product");
+
+  const photos =
+    p.images && p.images.length > 0
+      ? p.images
+      : [p.image];
+
+  const statusClass =
+    p.status === "Продано"
+      ? "sold"
+      : "available";
+
+  const statusText =
+    p.status === "Продано"
+      ? "🔴 Продано"
+      : "🟢 В наличии";
+
+  let thumbsHtml = "";
+
+  photos.forEach((img, index) => {
+    thumbsHtml += `
+      <img
+        src="${img}"
+        class="thumb ${index === 0 ? "active" : ""}"
+        onclick="changeMainPhoto('${img}', this)"
+      >
+    `;
+  });
+
+  container.innerHTML = `
+
+    <div class="gallery">
+
+      <img
+        src="${photos[0]}"
+        id="mainPhoto"
+        class="main-photo"
+      >
+
+      <div class="thumbnails">
+        ${thumbsHtml}
+      </div>
+
+    </div>
+
+    <div class="info">
+
+      <h1>${p.title}</h1>
+
+      <div class="status ${statusClass}">
+        ${statusText}
+      </div>
+
+      <div class="price">
+        ${p.price} ₸
+      </div>
+
+      <p>📂 ${p.category || "Другое"}</p>
+      <p>📍 ${p.city || "Не указан"}</p>
+      <p>${p.description}</p>
+
+      <p>
+        👤 Продавец:
+        ${p.user?.name || "Неизвестно"}
+      </p>
+
+      <div class="specs">
+
+        <h3>⚙️ Характеристики</h3>
+
+        <div class="spec-item">
+          <b>Артикул:</b> ${p.article || "-"}
+        </div>
+
+        <div class="spec-item">
+          <b>Бренд:</b> ${p.brand || "-"}
+        </div>
+
+        <div class="spec-item">
+          <b>Цвет:</b> ${p.color || "-"}
+        </div>
+
+        <div class="spec-item">
+          <b>Размер:</b> ${p.size || "-"}
+        </div>
+
+        <div class="spec-item">
+          <b>Состояние:</b> ${p.condition || "-"}
+        </div>
+
+      </div>
+
+      <button
+        class="buy-btn"
+        onclick='addToCart(${JSON.stringify(p)})'
+      >
+        🛒 Добавить в корзину
+      </button>
+
+      <button
+        class="fav-btn"
+        onclick='addToFavorites(${JSON.stringify(p)})'
+      >
+        ❤️ В избранное
+      </button>
+
+      <button
+        class="chat-btn"
+        onclick="
+          openChat(
+            '${p._id}',
+            '${p.user?.email}',
+            '${p.user?.name}'
+          )
+        "
+      >
+        💬 Написать продавцу
+      </button>
+
+    </div>
+  `;
+
+  renderReviews(p.reviews || []);
+}
+
+function openChat(productId, sellerEmail, sellerName) {
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    showToast(
+      "Сначала войдите",
+      "error"
+    );
+
+    setTimeout(() => {
+      window.location.href = "/login.html";
+    }, 1200);
+
+    return;
+  }
+
+  if (user.email === sellerEmail) {
+    showToast(
+      "Это ваш товар",
+      "error"
+    );
+    return;
+  }
+
+  window.location.href =
+    `/chat.html?productId=${productId}&sellerEmail=${sellerEmail}&sellerName=${sellerName}`;
+}
+
+function addToCart(product) {
+  if (product.status === "Продано") {
+    showToast(
+      "Товар продан",
+      "error"
+    );
+    return;
+  }
+
+  let cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  const existing =
+    cart.find(item =>
+      item._id === product._id
+    );
+
+  if (existing) {
+    existing.quantity =
+      (existing.quantity || 1) + 1;
+  } else {
+    product.quantity = 1;
+    cart.push(product);
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  updateCartCount();
+
+  showToast(
+    "Товар добавлен в корзину",
+    "success"
+  );
+}
+
+function addToFavorites(product) {
+  let favorites =
+    JSON.parse(localStorage.getItem("favorites")) || [];
+
+  const exists =
+    favorites.find(item =>
+      item._id === product._id
+    );
+
+  if (exists) {
+    showToast(
+      "Уже в избранном",
+      "error"
+    );
+    return;
+  }
+
+  favorites.push(product);
+
+  localStorage.setItem(
+    "favorites",
+    JSON.stringify(favorites)
+  );
+
+  showToast(
+    "Добавлено в избранное",
+    "success"
+  );
+}
+
+function renderReviews(reviews) {
+  const container =
+    document.getElementById("reviewsList");
+
+  container.innerHTML = "";
+
+  if (reviews.length === 0) {
+    container.innerHTML =
+      "<p>Отзывов пока нет</p>";
+    return;
+  }
+
+  reviews.forEach(r => {
+    container.innerHTML += `
+      <div class="review">
+        <b>${r.userName}</b>
+
+        <p>
+          ${"⭐".repeat(r.rating)}
+        </p>
+
+        <p>
+          ${r.text}
+        </p>
+      </div>
+    `;
+  });
+}
+
+async function addReview() {
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    showToast(
+      "Сначала войдите",
+      "error"
+    );
+    return;
+  }
+
+  const text =
+    document.getElementById("reviewText").value;
+
+  const rating =
+    document.getElementById("rating").value;
+
+  if (!text) {
+    showToast(
+      "Введите отзыв",
+      "error"
+    );
+    return;
+  }
+
+  await fetch("/products/" + productId + "/reviews", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userName: user.name,
+      text,
+      rating
+    })
+  });
+
+  showToast(
+    "Отзыв добавлен",
+    "success"
+  );
+
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
+}
+
+updateCartCount();
+checkUser();
+loadProduct();
+
+</script>
+
+<div id="toast" class="toast"></div>
+
+</body>
+</html>

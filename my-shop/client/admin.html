@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Админка</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+   * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #020808;
+  color: white;
+}
+
+    .navbar {
+  height: 75px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 55px;
+  background: rgba(0,0,0,0.9);
+  border-bottom: 1px solid rgba(0,255,204,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+    .logo {
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+}
+
+.logo span {
+  color: #00ffcc;
+}
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  padding-bottom: 8px;
+}
+
+.nav-links a:hover {
+  color: #00ffcc;
+  border-bottom: 2px solid #00ffcc;
+}
+
+    .container {
+  max-width: 1450px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+    .title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 42px;
+}
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.06),
+      rgba(255,255,255,0.02)
+    );
+
+  padding: 30px;
+
+  border-radius: 18px;
+
+  border:
+    1px solid rgba(0,255,204,0.18);
+
+  box-shadow:
+    0 0 25px rgba(0,0,0,0.35);
+
+  text-align: center;
+
+  transition: 0.25s;
+}
+
+.card:hover {
+
+  transform:
+    translateY(-5px);
+
+  box-shadow:
+    0 0 35px rgba(0,255,204,0.18);
+}
+
+    .card h2 {
+  margin: 0;
+  font-size: 42px;
+  color: #00ffcc;
+}
+
+    .card p {
+  margin-top: 12px;
+  color: #aaa;
+  font-size: 17px;
+}
+
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .chart-card {
+
+  background:
+    rgba(255,255,255,0.03);
+
+  padding: 25px;
+
+  border-radius: 18px;
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+
+  box-shadow:
+    0 0 25px rgba(0,0,0,0.35);
+}
+
+    .orders {
+      margin-top: 40px;
+    }
+
+    .order {
+
+  background:
+    rgba(255,255,255,0.03);
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  margin-top: 15px;
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+
+  box-shadow:
+    0 0 20px rgba(0,0,0,0.25);
+}
+
+    .order select {
+
+  padding: 12px;
+
+  margin-top: 12px;
+
+  border-radius: 10px;
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+
+  background: #071111;
+
+  color: white;
+}
+
+    .save-btn {
+
+  padding: 12px 18px;
+
+  border: none;
+
+  background: #00ffcc;
+
+  color: black;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  margin-top: 12px;
+
+  font-weight: bold;
+}
+
+   .delete-btn {
+
+  padding: 12px 18px;
+
+  border: none;
+
+  background: crimson;
+
+  color: white;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  margin-top: 12px;
+
+  margin-left: 10px;
+}
+
+    .items {
+
+  margin-top: 15px;
+
+  background:
+    rgba(255,255,255,0.03);
+
+  padding: 15px;
+
+  border-radius: 12px;
+}
+
+   .item {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 12px;
+
+  background:
+    #071111;
+
+  padding: 12px;
+
+  border-radius: 10px;
+}
+
+    .item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .user-card,
+.product-card {
+
+  background:
+    rgba(255,255,255,0.03);
+
+  padding: 22px;
+
+  border-radius: 16px;
+
+  margin-top: 15px;
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+
+  box-shadow:
+    0 0 20px rgba(0,0,0,0.25);
+}
+
+    .product-card img {
+
+  width: 140px;
+
+  height: 140px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+
+  margin-top: 12px;
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+}
+
+    .delete-user-btn,
+.delete-product-btn {
+
+  padding: 12px 18px;
+
+  border: none;
+
+  background: crimson;
+
+  color: white;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  margin-top: 15px;
+}
+
+    @media (max-width: 600px) {
+      .charts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<script>
+const adminEmail = "sobakizomb@gmail.com";
+
+const adminUser =
+  JSON.parse(localStorage.getItem("user"));
+
+if (
+  !adminUser ||
+  adminUser.email !== adminEmail
+) {
+  alert("У вас нет доступа");
+  window.location.href = "/index.html";
+}
+</script>
+
+<div class="navbar">
+
+  <div class="logo">
+  ⚙️ ADMIN <span>PANEL</span>
+</div>
+
+  <div class="nav-links">
+    <a href="/index.html">Главная</a>
+    <a href="/products.html">Товары</a>
+    <a href="/profile.html">Профиль</a>
+    <a href="/messages.html">Сообщения</a>
+  </div>
+
+</div>
+
+<div class="container">
+
+  <h1 class="title">
+    📊 Админ статистика
+  </h1>
+
+  <div class="stats">
+
+    <div class="card">
+      <h2 id="usersCount">0</h2>
+      <p>👥 Пользователей</p>
+    </div>
+
+    <div class="card">
+      <h2 id="productsCount">0</h2>
+      <p>📦 Товаров</p>
+    </div>
+
+    <div class="card">
+      <h2 id="ordersCount">0</h2>
+      <p>🧾 Заказов</p>
+    </div>
+
+    <div class="card">
+      <h2 id="sales">0 ₸</h2>
+      <p>💰 Продажи</p>
+    </div>
+
+    <div class="card">
+      <h2 id="newOrders">0</h2>
+      <p>🆕 Новые заказы</p>
+    </div>
+
+    <div class="card">
+      <h2 id="finishedOrders">0</h2>
+      <p>✅ Завершённые</p>
+    </div>
+
+  </div>
+
+  <div class="charts">
+
+    <div class="chart-card">
+      <h2>📈 Продажи по дням</h2>
+      <canvas id="salesChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h2>🧾 Заказы по статусам</h2>
+      <canvas id="statusChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h2>🏆 Популярные товары</h2>
+      <canvas id="popularChart"></canvas>
+    </div>
+
+  </div>
+
+  <div class="orders">
+
+    <h1 class="title">
+      🧾 Все заказы
+    </h1>
+
+    <div id="ordersList"></div>
+
+  </div>
+
+  <!-- 👥 ПОЛЬЗОВАТЕЛИ -->
+
+  <div class="orders">
+
+    <h1 class="title">
+      👥 Пользователи
+    </h1>
+
+    <div id="usersList"></div>
+
+  </div>
+
+  <!-- 📦 ТОВАРЫ -->
+
+  <div class="orders">
+
+    <h1 class="title">
+      📦 Все товары
+    </h1>
+
+    <div id="productsList"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+let allOrders = [];
+
+async function loadStats() {
+
+  const res =
+    await fetch("/admin/stats");
+
+  const stats =
+    await res.json();
+
+  document.getElementById("usersCount")
+    .textContent =
+      stats.usersCount;
+
+  document.getElementById("productsCount")
+    .textContent =
+      stats.productsCount;
+
+  document.getElementById("ordersCount")
+    .textContent =
+      stats.ordersCount;
+
+  document.getElementById("sales")
+    .textContent =
+      stats.totalSales + " ₸";
+
+  document.getElementById("newOrders")
+    .textContent =
+      stats.newOrders;
+
+  document.getElementById("finishedOrders")
+    .textContent =
+      stats.finishedOrders;
+}
+
+async function loadOrders() {
+
+  const res =
+    await fetch("/orders");
+
+  allOrders =
+    await res.json();
+
+  renderOrders();
+
+  renderCharts();
+}
+
+function renderOrders() {
+
+  const container =
+    document.getElementById("ordersList");
+
+  container.innerHTML = "";
+
+  if (allOrders.length === 0) {
+
+    container.innerHTML =
+      "<h3>Заказов пока нет</h3>";
+
+    return;
+  }
+
+  allOrders.slice().reverse().forEach(order => {
+
+    let itemsHtml = "";
+
+    (order.items || []).forEach(item => {
+
+      const img =
+        item.images &&
+        item.images.length > 0
+          ? item.images[0]
+          : item.image;
+
+      itemsHtml += `
+        <div class="item">
+
+          <img src="${img}">
+
+          <div>
+
+            <b>${item.title}</b>
+
+            <p>
+              ${item.price} ₸ x ${item.quantity || 1}
+            </p>
+
+          </div>
+
+        </div>
+      `;
+    });
+
+    container.innerHTML += `
+
+      <div class="order">
+
+        <h3>
+          Заказ № ${order._id}
+        </h3>
+
+        <p>
+          👤 ${order.name || ""}
+        </p>
+
+        <p>
+          📞 ${order.phone || ""}
+        </p>
+
+        <p>
+          📍 ${order.address || ""}
+        </p>
+
+        <p>
+          💰 ${order.total || 0} ₸
+        </p>
+
+        <div class="items">
+          ${itemsHtml}
+        </div>
+
+        <select id="status-${order._id}">
+
+          <option
+            value="Новый"
+            ${order.status === "Новый" ? "selected" : ""}
+          >
+            Новый
+          </option>
+
+          <option
+            value="Оплачен"
+            ${order.status === "Оплачен" ? "selected" : ""}
+          >
+            Оплачен
+          </option>
+
+          <option
+            value="В доставке"
+            ${order.status === "В доставке" ? "selected" : ""}
+          >
+            В доставке
+          </option>
+
+          <option
+            value="Завершён"
+            ${order.status === "Завершён" ? "selected" : ""}
+          >
+            Завершён
+          </option>
+
+        </select>
+
+        <br>
+
+        <button
+          class="save-btn"
+          onclick="saveStatus('${order._id}')"
+        >
+          💾 Сохранить статус
+        </button>
+
+        <button
+          class="delete-btn"
+          onclick="deleteOrder('${order._id}')"
+        >
+          🗑 Удалить заказ
+        </button>
+
+      </div>
+    `;
+  });
+}
+
+function renderCharts() {
+
+  renderSalesChart();
+
+  renderStatusChart();
+
+  renderPopularChart();
+}
+
+function renderSalesChart() {
+
+  const salesByDate = {};
+
+  allOrders.forEach(order => {
+
+    const date =
+      new Date(order.createdAt)
+        .toLocaleDateString();
+
+    salesByDate[date] =
+      (salesByDate[date] || 0) +
+      (Number(order.total) || 0);
+  });
+
+  const labels =
+    Object.keys(salesByDate);
+
+  const values =
+    Object.values(salesByDate);
+
+  new Chart(
+    document.getElementById("salesChart"),
+    {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Продажи ₸",
+          data: values,
+          borderWidth: 2,
+          tension: 0.3
+        }]
+      }
+    }
+  );
+}
+
+function renderStatusChart() {
+
+  const statuses = {
+    "Новый": 0,
+    "Оплачен": 0,
+    "В доставке": 0,
+    "Завершён": 0
+  };
+
+  allOrders.forEach(order => {
+
+    const status =
+      order.status || "Новый";
+
+    if (statuses[status] !== undefined) {
+      statuses[status]++;
+    }
+  });
+
+  new Chart(
+    document.getElementById("statusChart"),
+    {
+      type: "bar",
+      data: {
+        labels: Object.keys(statuses),
+        datasets: [{
+          label: "Количество заказов",
+          data: Object.values(statuses),
+          borderWidth: 1
+        }]
+      }
+    }
+  );
+}
+
+function renderPopularChart() {
+
+  const productCounts = {};
+
+  allOrders.forEach(order => {
+
+    (order.items || []).forEach(item => {
+
+      productCounts[item.title] =
+        (productCounts[item.title] || 0) +
+        (item.quantity || 1);
+    });
+  });
+
+  const sorted =
+    Object.entries(productCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+  const labels =
+    sorted.map(item => item[0]);
+
+  const values =
+    sorted.map(item => item[1]);
+
+  new Chart(
+    document.getElementById("popularChart"),
+    {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Продано штук",
+          data: values,
+          borderWidth: 1
+        }]
+      }
+    }
+  );
+}
+
+async function saveStatus(id) {
+
+  const status =
+    document.getElementById(
+      "status-" + id
+    ).value;
+
+  await fetch("/orders/" + id + "/status", {
+
+    method: "PUT",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      status
+    })
+  });
+
+  alert("Статус обновлён");
+
+  loadStats();
+  loadOrders();
+}
+
+async function deleteOrder(id) {
+
+  if (!confirm("Удалить заказ?")) {
+    return;
+  }
+
+  await fetch("/orders/" + id, {
+    method: "DELETE"
+  });
+
+  alert("Заказ удалён");
+
+  loadStats();
+  loadOrders();
+}
+
+
+
+
+async function loadUsers() {
+
+  const res =
+    await fetch("/users");
+
+  const users =
+    await res.json();
+
+  const container =
+    document.getElementById("usersList");
+
+  container.innerHTML = "";
+
+  users.forEach(user => {
+
+    const isAdmin =
+      user.email === "sobakizomb@gmail.com";
+
+    container.innerHTML += `
+
+      <div class="user-card">
+
+        <h3>
+          👤 ${user.name}
+        </h3>
+
+        <p>
+          📧 ${user.email}
+        </p>
+
+        <p>
+          🛡 Роль:
+          ${user.role || "user"}
+        </p>
+
+        <p>
+          ${
+            user.banned
+              ? "🚫 Заблокирован"
+              : "✅ Активен"
+          }
+        </p>
+
+        ${
+          !isAdmin
+            ? `
+              ${
+                user.banned
+                  ? `
+                    <button
+                      class="save-btn"
+                      onclick="unbanUser('${user._id}')"
+                    >
+                      ✅ Разбанить
+                    </button>
+                  `
+                  : `
+                    <button
+                      class="delete-btn"
+                      onclick="banUser('${user._id}')"
+                    >
+                      🚫 Забанить
+                    </button>
+                  `
+              }
+
+              <button
+                class="delete-user-btn"
+                onclick="deleteUser('${user._id}')"
+              >
+                🗑 Удалить пользователя
+              </button>
+            `
+            : `
+              <p>
+                👑 Главный администратор
+              </p>
+            `
+        }
+
+      </div>
+    `;
+  });
+}
+// 🗑 УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ
+async function deleteUser(id) {
+
+  if (!confirm(
+    "Удалить пользователя?"
+  )) {
+    return;
+  }
+
+  await fetch("/users/" + id, {
+    method: "DELETE"
+  });
+
+  alert(
+    "Пользователь удалён"
+  );
+
+  loadUsers();
+  loadStats();
+}
+
+
+// 🚫 БАН ПОЛЬЗОВАТЕЛЯ
+async function banUser(id) {
+
+  if (!confirm(
+    "Заблокировать пользователя?"
+  )) {
+    return;
+  }
+
+  await fetch("/users/" + id + "/ban", {
+    method: "PUT"
+  });
+
+  alert(
+    "Пользователь заблокирован"
+  );
+
+  loadUsers();
+}
+
+
+// ✅ РАЗБАН
+async function unbanUser(id) {
+
+  if (!confirm(
+    "Разблокировать пользователя?"
+  )) {
+    return;
+  }
+
+  await fetch("/users/" + id + "/unban", {
+    method: "PUT"
+  });
+
+  alert(
+    "Пользователь разблокирован"
+  );
+
+  loadUsers();
+}
+
+
+// 📦 ТОВАРЫ
+async function loadProducts() {
+
+  const res =
+    await fetch("/products");
+
+  const products =
+    await res.json();
+
+  const container =
+    document.getElementById("productsList");
+
+  container.innerHTML = "";
+
+  products.reverse().forEach(product => {
+
+    const image =
+      product.images &&
+      product.images.length > 0
+        ? product.images[0]
+        : product.image;
+
+    container.innerHTML += `
+
+      <div class="product-card">
+
+        <h3>
+          📦 ${product.title}
+        </h3>
+
+        <p>
+          💰 ${product.price} ₸
+        </p>
+
+        <p>
+          👤 ${product.user?.name || "Неизвестно"}
+        </p>
+
+        <img src="${image}">
+
+        <br>
+
+        <button
+          class="delete-product-btn"
+          onclick="deleteProduct('${product._id}')"
+        >
+          🗑 Удалить товар
+        </button>
+
+      </div>
+    `;
+  });
+}
+
+async function deleteProduct(id) {
+
+  if (!confirm(
+    "Удалить товар?"
+  )) {
+    return;
+  }
+
+  await fetch("/products/" + id, {
+    method: "DELETE"
+  });
+
+  alert("Товар удалён");
+
+  loadProducts();
+  loadStats();
+}
+
+loadStats();
+loadOrders();
+loadUsers();
+loadProducts();
+
+</script>
+
+</body>
+</html>

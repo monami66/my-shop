@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Оформление заказа</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #f5f5f5;
+    }
+
+   
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      padding: 15px 30px;
+      color: white;
+    }
+
+    .logo {
+      color: #00ffcc;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: #00ffcc;
+    }
+
+    .btn {
+      background: #00ffcc;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .form {
+      max-width: 400px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+
+<div class="navbar">
+
+  <div class="logo">MY SHOP</div>
+
+  <div class="nav-links">
+    <a href="/products.html">Товары</a>
+    <a href="/add-product.html">Добавить товар</a>
+    <a href="/cart.html">
+      🛒 Корзина (<span id="cart-count">0</span>)
+    </a>
+  </div>
+
+  <!-- 👤 ПОЛЬЗОВАТЕЛЬ -->
+  <div id="user-block">
+    <a href="/login.html">
+      <button class="btn">Вход</button>
+    </a>
+  </div>
+
+</div>
+
+
+<h2>Оформление заказа</h2>
+
+<div class="form">
+  <input id="name" placeholder="Имя">
+  <input id="phone" placeholder="Телефон">
+  <input id="address" placeholder="Адрес">
+
+  <button onclick="checkout()">Оформить заказ</button>
+</div>
+
+<script>
+
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const el = document.getElementById("cart-count");
+
+  if (el) {
+    el.textContent = cart.length;
+  }
+}
+
+
+function checkUser() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const block = document.getElementById("user-block");
+
+  if (user && block) {
+    block.innerHTML = `
+      <span style="margin-right:10px;">${user.name}</span>
+      <button class="btn" onclick="logout()">Выйти</button>
+    `;
+
+    
+    document.getElementById("name").value = user.name;
+  }
+}
+
+
+function logout() {
+  localStorage.removeItem("user");
+  location.reload();
+}
+
+
+async function checkout() {
+
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (cart.length === 0) {
+    alert("Корзина пустая");
+    return;
+  }
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const address = document.getElementById("address").value;
+
+  let total = 0;
+
+  cart.forEach(i => {
+    total += i.price * (i.quantity || 1);
+  });
+
+  const res = await fetch("/create-order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      user: user || null,
+      name,
+      phone,
+      address,
+      items: cart,
+      total
+    })
+  });
+
+  const data = await res.json();
+
+  alert("Заказ оформлен ✅");
+
+  localStorage.removeItem("cart");
+
+  window.location.href = "/products.html";
+}
+
+
+updateCartCount();
+checkUser();
+</script>
+
+</body>
+</html>

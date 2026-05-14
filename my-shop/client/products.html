@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Товары</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #020808;
+      color: white;
+    }
+
+    .navbar {
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 55px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid rgba(0,255,204,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .logo span {
+      color: #00ffcc;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 17px;
+      padding-bottom: 8px;
+    }
+
+    .nav-links a:hover,
+    .nav-links .active {
+      color: #00ffcc;
+      border-bottom: 2px solid #00ffcc;
+    }
+
+    .btn,
+    .user-btn {
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #081212;
+      min-width: 240px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,255,204,0.25);
+      border: 1px solid rgba(0,255,204,0.25);
+      z-index: 1000;
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a,
+    .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      background: #081212;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+    }
+
+    .dropdown a:hover,
+    .dropdown button:hover {
+      background: #102020;
+      color: #00ffcc;
+    }
+
+    .badge {
+      background: crimson;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .page-header {
+      max-width: 1450px;
+      margin: 25px auto;
+      padding: 35px 40px;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.22);
+      background:
+        radial-gradient(circle at 80% 50%, rgba(0,255,204,0.18), transparent 35%),
+        linear-gradient(90deg, #020808 0%, #061414 60%, #031010 100%);
+      box-shadow: 0 0 35px rgba(0,255,204,0.08);
+    }
+
+    .page-header h1 {
+      margin: 0;
+      font-size: 44px;
+    }
+
+    .page-header h1 span {
+      color: #00ffcc;
+    }
+
+    .page-header p {
+      color: #bcbcbc;
+      font-size: 18px;
+      margin: 12px 0 0;
+    }
+
+    .container {
+      max-width: 1450px;
+      margin: 25px auto;
+      display: flex;
+      gap: 25px;
+      padding: 0 10px;
+    }
+
+    .filters {
+      width: 285px;
+      min-width: 285px;
+      height: fit-content;
+      padding: 22px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(0,255,204,0.2);
+      box-shadow: 0 0 30px rgba(0,0,0,0.35);
+      position: sticky;
+      top: 95px;
+    }
+
+    .filters h3 {
+      margin-top: 0;
+      color: #00ffcc;
+      font-size: 22px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      box-sizing: border-box;
+      border-radius: 9px;
+      border: 1px solid rgba(0,255,204,0.2);
+      background: #071111;
+      color: white;
+      outline: none;
+    }
+
+    .filters input::placeholder {
+      color: #777;
+    }
+
+    .filters input:focus,
+    .filters select:focus {
+      border-color: #00ffcc;
+      box-shadow: 0 0 15px rgba(0,255,204,0.18);
+    }
+
+    .products-area {
+      flex: 1;
+    }
+
+    .products-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      color: #aaa;
+    }
+
+    .products-top strong {
+      color: #00ffcc;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(0,255,204,0.22);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,0,0,0.35);
+      position: relative;
+      transition: 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 35px rgba(0,255,204,0.22);
+    }
+
+    .main-image {
+      width: 100%;
+      height: 225px;
+      object-fit: cover;
+      display: block;
+      background: #081212;
+    }
+
+    .gallery {
+      display: flex;
+      gap: 6px;
+      padding: 10px 12px 0;
+      overflow-x: auto;
+    }
+
+    .gallery img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 7px;
+      border: 1px solid rgba(0,255,204,0.2);
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 19px;
+      min-height: 44px;
+    }
+
+    .price {
+      color: #00ffcc;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 12px 0;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      color: white;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .available {
+      background: #008866;
+    }
+
+    .sold {
+      background: crimson;
+    }
+
+    .spec {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+    .btn-card {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid rgba(0,255,204,0.45);
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 12px;
+      background: rgba(255,255,255,0.06);
+      color: #00ffcc;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .btn-card:hover {
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 35px 0;
+    }
+
+    .pagination button {
+      padding: 12px 22px;
+      border: 1px solid rgba(0,255,204,0.35);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      color: white;
+      cursor: pointer;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .page-info {
+      font-weight: bold;
+      font-size: 18px;
+      color: #00ffcc;
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,255,204,0.3);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.3s;
+      z-index: 9999;
+      font-weight: bold;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: #00aa88;
+    }
+
+    .toast.error {
+      background: crimson;
+    }
+
+    .footer {
+      margin-top: 70px;
+      background: #050b0b;
+      border-top: 1px solid rgba(0,255,204,0.15);
+      padding-top: 50px;
+    }
+
+    .footer-container {
+      max-width: 1450px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+      padding: 0 40px 40px;
+    }
+
+    .footer-column h3 {
+      color: white;
+      margin-bottom: 18px;
+    }
+
+    .footer-logo {
+      font-size: 34px;
+      margin: 0;
+    }
+
+    .footer-logo span {
+      color: #00ffcc;
+    }
+
+    .footer-column p {
+      color: #aaa;
+      line-height: 1.7;
+    }
+
+    .footer-column a {
+      display: block;
+      color: #aaa;
+      text-decoration: none;
+      margin-bottom: 12px;
+      transition: 0.2s;
+    }
+
+    .footer-column a:hover {
+      color: #00ffcc;
+    }
+
+    .socials {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .socials a {
+      width: 42px;
+      height: 42px;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      font-size: 18px;
+      transition: 0.25s;
+    }
+
+    .socials a:hover {
+      background: #00ffcc;
+      color: black;
+    }
+
+    .subscribe {
+      display: flex;
+      margin-top: 15px;
+    }
+
+    .subscribe input {
+      flex: 1;
+      padding: 13px;
+      border: none;
+      outline: none;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .subscribe button {
+      width: 60px;
+      border: none;
+      background: #00ffcc;
+      color: black;
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 25px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      color: #777;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .footer-links a {
+      color: #777;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: #00ffcc;
+    }
+
+    @media (max-width: 900px) {
+      .navbar {
+        padding: 15px 20px;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 15px;
+      }
+
+      .container {
+        flex-direction: column;
+        padding: 0 15px;
+      }
+
+      .filters {
+        width: 100%;
+        min-width: 100%;
+        position: static;
+      }
+
+      .page-header {
+        margin: 15px;
+      }
+
+      .page-header h1 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <div class="logo">
+    MY <span>SHOP</span>
+  </div>
+
+  <div class="nav-links">
+    <a href="/index.html">Главная</a>
+    <a href="/products.html" class="active">Товары</a>
+    <a href="/cart.html">
+      🛒 Корзина (<span id="cart-count">0</span>)
+    </a>
+  </div>
+
+  <div id="user-block">
+    <a href="/login.html">
+      <button class="btn">Вход</button>
+    </a>
+  </div>
+
+</div>
+
+<section class="page-header">
+  <h1>
+    Каталог <span>товаров</span>
+  </h1>
+  <p>
+    Найди нужный товар с помощью поиска, фильтров и сортировки
+  </p>
+</section>
+
+<div class="container">
+
+  <aside class="filters">
+
+    <h3> Фильтр</h3>
+
+    <input
+      type="text"
+      id="search"
+      placeholder="Поиск по названию или артикулу"
+      oninput="applyFilters()"
+    >
+
+    <input
+      type="number"
+      id="minPrice"
+      placeholder="Цена от"
+      oninput="applyFilters()"
+    >
+
+    <input
+      type="number"
+      id="maxPrice"
+      placeholder="Цена до"
+      oninput="applyFilters()"
+    >
+
+    <input
+      type="text"
+      id="brand"
+      placeholder="Бренд"
+      oninput="applyFilters()"
+    >
+
+    <input
+      type="text"
+      id="color"
+      placeholder="Цвет"
+      oninput="applyFilters()"
+    >
+
+    <input
+      type="text"
+      id="size"
+      placeholder="Размер"
+      oninput="applyFilters()"
+    >
+
+    <select id="condition" onchange="applyFilters()">
+      <option value="">Состояние</option>
+      <option value="Новое">Новое</option>
+      <option value="Б/У">Б/У</option>
+    </select>
+
+    <select id="category" onchange="applyFilters()">
+      <option value="">Категория</option>
+      <option value="Телефоны">Телефоны</option>
+      <option value="Ноутбуки">Ноутбуки</option>
+      <option value="Игры">Игры</option>
+      <option value="Одежда">Одежда</option>
+      <option value="Другое">Другое</option>
+    </select>
+
+    <select id="city" onchange="applyFilters()">
+      <option value="">Город</option>
+      <option value="Алматы">Алматы</option>
+      <option value="Астана">Астана</option>
+      <option value="Шымкент">Шымкент</option>
+      <option value="Караганда">Караганда</option>
+      <option value="Другое">Другое</option>
+    </select>
+
+    <select id="sort" onchange="applyFilters()">
+      <option value="">Сортировка</option>
+      <option value="cheap">Сначала дешёвые</option>
+      <option value="expensive">Сначала дорогие</option>
+      <option value="new">Сначала новые</option>
+    </select>
+
+  </aside>
+
+  <main class="products-area">
+
+    <div class="products-top">
+      <div>
+        Найдено товаров:
+        <strong id="productsCount">0</strong>
+      </div>
+    </div>
+
+    <div class="products" id="products"></div>
+
+    <div class="pagination">
+
+      <button
+        id="prevBtn"
+        onclick="prevPage()"
+      >
+        ⬅ Назад
+      </button>
+
+      <div class="page-info" id="pageInfo">
+        1
+      </div>
+
+      <button
+        id="nextBtn"
+        onclick="nextPage()"
+      >
+        Вперёд ➡
+      </button>
+
+    </div>
+
+  </main>
+
+</div>
+
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <div class="footer-column">
+
+      <h2 class="footer-logo">
+        MY <span>SHOP</span>
+      </h2>
+
+      <p>
+        Лучший маркетплейс
+        в Казахстане.
+      </p>
+
+
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Контакты</h3>
+
+      <p> +7 777 123 45 67</p>
+      <p> info@myshop.kz</p>
+      <p> Алматы, Казахстан</p>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Покупателям</h3>
+
+      <a href="#">Как купить</a>
+      <a href="#">Доставка и оплата</a>
+      <a href="#">Возврат товара</a>
+      <a href="#">Помощь</a>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Продавцам</h3>
+
+      <a href="#">Как продавать</a>
+      <a href="#">Правила</a>
+      <a href="#">Тарифы</a>
+      <a href="#">Поддержка</a>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Подписка на новости</h3>
+
+      <p>
+        Будьте в курсе акций
+        и новинок
+      </p>
+
+      <div class="subscribe">
+
+        <input
+          type="email"
+          placeholder="Ваш email"
+        >
+
+        <button>
+          ➤
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <p>
+      © 2026 MY SHOP.
+      Все права защищены.
+    </p>
+
+    <div class="footer-links">
+      <a href="#">
+        Политика конфиденциальности
+      </a>
+
+      <a href="#">
+        Пользовательское соглашение
+      </a>
+    </div>
+
+  </div>
+
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+let allProducts = [];
+let filteredProducts = [];
+
+let currentPage = 1;
+const productsPerPage = 8;
+
+function showToast(message, type = "success") {
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+  setTimeout(() => {
+    toast.className =
+      "toast " + type;
+  }, 2500);
+}
+
+function updateCartCount() {
+  const cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  document.getElementById("cart-count")
+    .textContent = cart.length;
+}
+
+async function getUnreadCount() {
+
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  if (!user) return 0;
+
+  try {
+    const res =
+      await fetch("/messages/unread/" + user.email);
+
+    const data =
+      await res.json();
+
+    return data.unread || 0;
+  } catch {
+    return 0;
+  }
+}
+
+async function checkUser() {
+
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  const block =
+    document.getElementById("user-block");
+
+  if (!user || !block) return;
+
+  const unread =
+    await getUnreadCount();
+
+  block.innerHTML = `
+    <div class="user-menu">
+
+      <button
+        class="user-btn"
+        onclick="toggleMenu()"
+      >
+         ${user.name} ▼
+      </button>
+
+      <div class="dropdown" id="dropdownMenu">
+
+        <a href="/notifications.html">
+          🔔 Уведомления
+          ${unread > 0
+            ? `<span class="badge">${unread}</span>`
+            : ""
+          }
+        </a>
+
+        <a href="/messages.html">
+          💬 Сообщения
+        </a>
+
+        <a href="/favorites.html">
+          ❤️ Избранное
+        </a>
+
+        <a href="/add-product.html">
+          ➕ Добавить товар
+        </a>
+
+        <a href="/my-products.html">
+          📦 Мои товары
+        </a>
+
+        <a href="/profile.html">
+          👤 Личный кабинет
+        </a>
+
+        ${user.email === "sobakizomb@gmail.com" ? `
+          <a href="/admin.html">
+            ⚙️ Админка
+          </a>
+        ` : ""}
+
+        <button onclick="logout()">
+          🚪 Выйти
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function toggleMenu() {
+  document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "/login.html";
+}
+
+window.addEventListener("click", function(e) {
+
+  const menu =
+    document.getElementById("dropdownMenu");
+
+  const btn =
+    document.querySelector(".user-btn");
+
+  if (!menu || !btn) return;
+
+  if (
+    !menu.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
+    menu.classList.remove("show");
+  }
+});
+
+async function loadProducts() {
+
+  const res =
+    await fetch("/products");
+
+  allProducts =
+    await res.json();
+
+  filteredProducts =
+    [...allProducts].reverse();
+
+  renderProducts();
+}
+
+function renderProducts() {
+
+  const container =
+    document.getElementById("products");
+
+  const count =
+    document.getElementById("productsCount");
+
+  container.innerHTML = "";
+  count.textContent = filteredProducts.length;
+
+  const start =
+    (currentPage - 1) * productsPerPage;
+
+  const end =
+    start + productsPerPage;
+
+  const productsToShow =
+    filteredProducts.slice(start, end);
+
+  if (productsToShow.length === 0) {
+
+    container.innerHTML =
+      "<h3>Товары не найдены</h3>";
+
+    updatePagination();
+
+    return;
+  }
+
+  productsToShow.forEach(p => {
+
+    const statusClass =
+      p.status === "Продано"
+        ? "sold"
+        : "available";
+
+    const statusText =
+      p.status === "Продано"
+        ? "🔴 Продано"
+        : "🟢 В наличии";
+
+    const images =
+      p.images && p.images.length > 0
+        ? p.images
+        : [p.image];
+
+    let gallery = "";
+
+    images.forEach(img => {
+      gallery += `
+        <img src="${img}">
+      `;
+    });
+
+    container.innerHTML += `
+      <div class="card">
+
+        <a href="/product.html?id=${p._id}">
+          <img
+            src="${images[0]}"
+            class="main-image"
+          >
+        </a>
+
+        <div class="gallery">
+          ${gallery}
+        </div>
+
+        <div class="card-body">
+
+          <h3>${p.title}</h3>
+
+          <div class="status ${statusClass}">
+            ${statusText}
+          </div>
+
+          <div class="spec">
+            🏷 ${p.brand || "Без бренда"}
+          </div>
+
+          <div class="spec">
+            🎨 ${p.color || "Не указан"}
+          </div>
+
+          <div class="spec">
+            📏 ${p.size || "Не указан"}
+          </div>
+
+          <div class="price">
+            ${p.price} ₸
+          </div>
+
+          <a href="/product.html?id=${p._id}">
+            <button class="btn-card">
+              Подробнее →
+            </button>
+          </a>
+
+        </div>
+
+      </div>
+    `;
+  });
+
+  updatePagination();
+}
+
+function updatePagination() {
+
+  const totalPages =
+    Math.ceil(
+      filteredProducts.length /
+      productsPerPage
+    );
+
+  document.getElementById("pageInfo")
+    .textContent =
+      `${currentPage} / ${totalPages || 1}`;
+
+  document.getElementById("prevBtn")
+    .disabled =
+      currentPage === 1;
+
+  document.getElementById("nextBtn")
+    .disabled =
+      currentPage >= totalPages;
+}
+
+function nextPage() {
+
+  const totalPages =
+    Math.ceil(
+      filteredProducts.length /
+      productsPerPage
+    );
+
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderProducts();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+}
+
+function prevPage() {
+
+  if (currentPage > 1) {
+    currentPage--;
+    renderProducts();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+}
+
+function applyFilters() {
+
+  const search =
+    document.getElementById("search")
+      .value.toLowerCase();
+
+  const minPrice =
+    Number(
+      document.getElementById("minPrice")
+        .value
+    ) || 0;
+
+  const maxPrice =
+    Number(
+      document.getElementById("maxPrice")
+        .value
+    ) || Infinity;
+
+  const brand =
+    document.getElementById("brand")
+      .value.toLowerCase();
+
+  const color =
+    document.getElementById("color")
+      .value.toLowerCase();
+
+  const size =
+    document.getElementById("size")
+      .value.toLowerCase();
+
+  const condition =
+    document.getElementById("condition")
+      .value;
+
+  const category =
+    document.getElementById("category")
+      .value;
+
+  const city =
+    document.getElementById("city")
+      .value;
+
+  const sort =
+    document.getElementById("sort")
+      .value;
+
+  filteredProducts =
+    allProducts.filter(p => {
+
+      return (
+        (
+          p.title?.toLowerCase().includes(search) ||
+          p.article?.toLowerCase().includes(search)
+        )
+
+        && Number(p.price) >= minPrice
+
+        && Number(p.price) <= maxPrice
+
+        && (p.brand || "")
+          .toLowerCase()
+          .includes(brand)
+
+        && (p.color || "")
+          .toLowerCase()
+          .includes(color)
+
+        && (p.size || "")
+          .toLowerCase()
+          .includes(size)
+
+        && (
+          !condition ||
+          p.condition === condition
+        )
+
+        && (
+          !category ||
+          p.category === category
+        )
+
+        && (
+          !city ||
+          p.city === city
+        )
+      );
+    });
+
+  if (sort === "cheap") {
+    filteredProducts.sort(
+      (a, b) => Number(a.price) - Number(b.price)
+    );
+  }
+
+  if (sort === "expensive") {
+    filteredProducts.sort(
+      (a, b) => Number(b.price) - Number(a.price)
+    );
+  }
+
+  if (sort === "new") {
+    filteredProducts =
+      filteredProducts.reverse();
+  }
+
+  currentPage = 1;
+
+  renderProducts();
+}
+
+updateCartCount();
+checkUser();
+loadProducts();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>MY SHOP</title>
+
+  <style>
+    .toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #111;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0,255,204,0.3);
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: 0.3s;
+  z-index: 9999;
+  font-weight: bold;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success {
+  background: #00aa88;
+}
+
+.toast.error {
+  background: crimson;
+}
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #020808;
+      color: white;
+    }
+
+    .navbar {
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 55px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid rgba(0,255,204,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .logo span {
+      color: #00ffcc;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 17px;
+      padding-bottom: 8px;
+    }
+
+    .nav-links a:hover,
+    .nav-links .active {
+      color: #00ffcc;
+      border-bottom: 2px solid #00ffcc;
+    }
+
+    .btn,
+    .user-btn {
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #081212;
+      min-width: 240px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,255,204,0.25);
+      border: 1px solid rgba(0,255,204,0.25);
+      z-index: 1000;
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a,
+    .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      background: #081212;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      font-size: 15px;
+    }
+
+    .dropdown a:hover,
+    .dropdown button:hover {
+      background: #102020;
+      color: #00ffcc;
+    }
+
+    .badge {
+      background: crimson;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .hero {
+      max-width: 1450px;
+      min-height: 440px;
+      margin: 25px auto;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.25);
+      background:
+        radial-gradient(circle at 75% 50%, rgba(0,255,204,0.25), transparent 35%),
+        linear-gradient(90deg, #020808 0%, #061414 45%, #031010 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 0 35px rgba(0,255,204,0.08);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: 60px;
+      top: 35px;
+      width: 520px;
+      height: 360px;
+      background:
+        radial-gradient(circle, rgba(0,255,204,0.35), transparent 60%);
+      filter: blur(25px);
+    }
+
+    .hero-content {
+      width: 48%;
+      padding-left: 90px;
+      z-index: 2;
+    }
+
+    .tag {
+      display: inline-block;
+      border: 1px solid rgba(0,255,204,0.35);
+      color: #00ffcc;
+      padding: 8px 15px;
+      border-radius: 25px;
+      font-size: 15px;
+      margin-bottom: 25px;
+      background: rgba(0,255,204,0.05);
+    }
+
+    .hero h1 {
+      font-size: 58px;
+      line-height: 1.05;
+      margin: 0;
+      color: white;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.7);
+    }
+
+    .hero h1 span {
+      color: #00ffcc;
+      display: block;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: #cfcfcf;
+      margin: 25px 0 35px;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 17px 28px;
+      border-radius: 10px;
+      background: #00ffcc;
+      color: black;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 0 25px rgba(0,255,204,0.35);
+    }
+
+    .hero-img {
+      flex: 1;
+      min-height: 430px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+.hero-image {
+  width: 850px;
+  max-width: 100%;
+  object-fit: contain;
+
+  filter:
+    drop-shadow(0 0 40px rgba(0,255,204,0.25));
+
+  animation:
+    float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+
+
+
+    .cart-shape::before {
+      content: "";
+      position: absolute;
+      left: -35px;
+      top: -45px;
+      width: 55px;
+      height: 110px;
+      border-left: 5px solid #00ffcc;
+      transform: rotate(-25deg);
+    }
+
+
+
+    .wheel.one {
+      left: 135px;
+    }
+
+    .wheel.two {
+      left: 360px;
+    }
+
+ 
+
+
+
+    .popular {
+      max-width: 1450px;
+      margin: 25px auto 40px;
+      border-radius: 22px;
+      border: 1px solid rgba(0,255,204,0.2);
+      background: rgba(255,255,255,0.03);
+      padding: 35px 35px 25px;
+      box-shadow: 0 0 35px rgba(0,0,0,0.4);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 34px;
+      margin: 0 0 25px;
+    }
+
+    .section-title span {
+      color: #00ffcc;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(0,255,204,0.25);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,0,0,0.35);
+      position: relative;
+      transition: 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 35px rgba(0,255,204,0.25);
+    }
+
+    .card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .price {
+      color: #00ffcc;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .cart-btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 16px;
+    }
+
+    .cart-btn:hover {
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+    }
+
+    .heart {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+      text-shadow: 0 0 10px black;
+    }
+
+    .hit {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #00ffcc;
+      color: black;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .navbar {
+        padding: 0 20px;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 15px;
+      }
+
+      .hero {
+        margin: 15px;
+        flex-direction: column;
+      }
+
+      .hero-content {
+        width: 100%;
+        padding: 40px 25px;
+      }
+
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .hero-img {
+        display: none;
+      }
+
+      .popular {
+        margin: 15px;
+        padding: 25px 15px;
+      }
+    }
+    .footer {
+  margin-top: 70px;
+  background: #050b0b;
+  border-top: 1px solid rgba(0,255,204,0.15);
+  padding-top: 50px;
+}
+
+.footer-container {
+  max-width: 1450px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+  gap: 40px;
+
+  padding: 0 40px 40px;
+}
+
+.footer-column h3 {
+  color: white;
+  margin-bottom: 18px;
+}
+
+.footer-logo {
+  font-size: 34px;
+  margin: 0;
+}
+
+.footer-logo span {
+  color: #00ffcc;
+}
+
+.footer-column p {
+  color: #aaa;
+  line-height: 1.7;
+}
+
+.footer-column a {
+  display: block;
+  color: #aaa;
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: 0.2s;
+}
+
+.footer-column a:hover {
+  color: #00ffcc;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.socials a {
+  width: 42px;
+  height: 42px;
+  background: rgba(255,255,255,0.06);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  font-size: 18px;
+
+  transition: 0.25s;
+}
+
+.socials a:hover {
+  background: #00ffcc;
+  color: black;
+}
+
+.subscribe {
+  display: flex;
+  margin-top: 15px;
+}
+
+.subscribe input {
+  flex: 1;
+  padding: 13px;
+  border: none;
+  outline: none;
+
+  background: rgba(255,255,255,0.05);
+  color: white;
+
+  border-radius: 8px 0 0 8px;
+}
+
+.subscribe button {
+  width: 60px;
+  border: none;
+  background: #00ffcc;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+
+  border-radius: 0 8px 8px 0;
+}
+
+.footer-bottom {
+  border-top:
+    1px solid rgba(255,255,255,0.08);
+
+  padding: 25px 40px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  color: #777;
+}
+
+.footer-links {
+  display: flex;
+  gap: 25px;
+}
+
+.footer-links a {
+  color: #777;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #00ffcc;
+}
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <div class="logo">
+    MY <span>SHOP</span>
+  </div>
+
+  <div class="nav-links">
+    <a href="/index.html" class="active">Главная</a>
+    <a href="/products.html">Товары</a>
+    <a href="/cart.html">
+      🛒 Корзина (<span id="cart-count">0</span>)
+    </a>
+  </div>
+
+  <div id="user-block">
+    <a href="/login.html">
+      <button class="btn">Вход</button>
+    </a>
+  </div>
+
+</div>
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <div class="tag">
+      ★ Добро пожаловать
+    </div>
+
+    <h1>
+      Добро пожаловать в
+      <span>MY SHOP</span>
+    </h1>
+
+    <p>
+      Покупай и продавай товары по всему Казахстану
+    </p>
+
+    <a href="/products.html" class="hero-btn">
+       Смотреть товары →
+    </a>
+
+  </div>
+
+<div class="hero-img">
+
+  <img
+    src="/images/hero3.png"
+    class="hero-image"
+  >
+
+</div>
+
+</section>
+
+<section class="popular">
+
+  <h2 class="section-title">
+    🔥 Популярные товары
+  </h2>
+
+  <div class="products" id="popularProducts"></div>
+
+</section>
+
+<script>
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.className =
+    "toast show " + type;
+
+  setTimeout(() => {
+
+    toast.className =
+      "toast " + type;
+
+  }, 2500);
+}
+  
+
+function updateCartCount() {
+  const cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  document.getElementById("cart-count")
+    .textContent = cart.length;
+}
+
+async function getUnreadCount(email) {
+  try {
+    const res =
+      await fetch("/messages/unread/" + email);
+
+    const data =
+      await res.json();
+
+    return data.unread || 0;
+  } catch {
+    return 0;
+  }
+}
+
+async function checkUser() {
+
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  const block =
+    document.getElementById("user-block");
+
+  if (!user || !block) return;
+
+  const unread =
+    await getUnreadCount(user.email);
+
+  block.innerHTML = `
+    <div class="user-menu">
+
+      <button
+        class="user-btn"
+        onclick="toggleMenu()"
+      >
+         ${user.name} ▼
+      </button>
+
+      <div class="dropdown" id="dropdownMenu">
+
+        <a href="/notifications.html">
+          🔔 Уведомления
+          ${unread > 0 ? `<span class="badge">${unread}</span>` : ""}
+        </a>
+
+        <a href="/messages.html">
+          💬 Сообщения
+        </a>
+
+        <a href="/favorites.html">
+          ❤️ Избранное
+        </a>
+
+        <a href="/add-product.html">
+          ➕ Добавить товар
+        </a>
+
+        <a href="/my-products.html">
+          📦 Мои товары
+        </a>
+
+        <a href="/profile.html">
+          👤 Личный кабинет
+        </a>
+
+        ${user.email === "sobakizomb@gmail.com" ? `
+          <a href="/admin.html">
+            ⚙️ Админка
+          </a>
+        ` : ""}
+
+        <button onclick="logout()">
+          🚪 Выйти
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function toggleMenu() {
+  document
+    .getElementById("dropdownMenu")
+    .classList.toggle("show");
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "/login.html";
+}
+
+window.addEventListener("click", function(e) {
+  const menu =
+    document.getElementById("dropdownMenu");
+
+  const btn =
+    document.querySelector(".user-btn");
+
+  if (!menu || !btn) return;
+
+  if (
+    !menu.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
+    menu.classList.remove("show");
+  }
+});
+
+async function loadPopularProducts() {
+  const container =
+    document.getElementById("popularProducts");
+
+  try {
+    const res =
+      await fetch("/products");
+
+    const products =
+      await res.json();
+
+    container.innerHTML = "";
+
+    products
+      .slice(-4)
+      .reverse()
+      .forEach((p, index) => {
+
+        const img =
+          p.images && p.images.length > 0
+            ? p.images[0]
+            : p.image;
+
+        container.innerHTML += `
+          <div class="card">
+
+            ${index === 0 ? `<div class="hit">ХИТ</div>` : ""}
+
+            <div
+              class="heart"
+              onclick='addToFavorites(${JSON.stringify(p)})'
+            >
+              ♡
+            </div>
+
+            <a href="/product.html?id=${p._id}">
+              <img src="${img}">
+            </a>
+
+            <div class="card-body">
+
+              <h3>${p.title}</h3>
+
+              <div class="price">
+                ${p.price} ₸
+              </div>
+
+              <a href="/product.html?id=${p._id}">
+                <button class="cart-btn">
+                  Подробнее 
+                </button>
+              </a>
+
+            </div>
+
+          </div>
+        `;
+      });
+
+  } catch (err) {
+    container.innerHTML =
+      "<h3>Не удалось загрузить товары</h3>";
+  }
+}
+
+function addToCart(product) {
+  if (product.status === "Продано") {
+    alert("Товар продан");
+    return;
+  }
+
+  let cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
+
+  const existing =
+    cart.find(item =>
+      item._id === product._id
+    );
+
+  if (existing) {
+    existing.quantity =
+      (existing.quantity || 1) + 1;
+  } else {
+    product.quantity = 1;
+    cart.push(product);
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  updateCartCount();
+
+  alert("Товар добавлен в корзину");
+}
+
+function addToFavorites(product) {
+  let favorites =
+    JSON.parse(localStorage.getItem("favorites")) || [];
+
+  const exists =
+    favorites.find(item =>
+      item._id === product._id
+    );
+
+  if (exists) {
+    showToast("Уже в избранном", "error");
+    return;
+  }
+
+  favorites.push(product);
+
+  localStorage.setItem(
+    "favorites",
+    JSON.stringify(favorites)
+  );
+
+  showToast("Добавлено в избранное", "success");
+}
+
+updateCartCount();
+checkUser();
+loadPopularProducts();
+
+</script>
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <div class="footer-column">
+
+      <h2 class="footer-logo">
+        MY <span>SHOP</span>
+      </h2>
+
+      <p>
+        Лучший маркетплейс
+        в Казахстане.
+      </p>
+
+
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Контакты</h3>
+
+      <p> +7 777 123 45 67</p>
+      <p> info@myshop.kz</p>
+      <p> Алматы, Казахстан</p>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Покупателям</h3>
+
+      <a href="#">Как купить</a>
+      <a href="#">Доставка и оплата</a>
+      <a href="#">Возврат товара</a>
+      <a href="#">Помощь</a>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Продавцам</h3>
+
+      <a href="#">Как продавать</a>
+      <a href="#">Правила</a>
+      <a href="#">Тарифы</a>
+      <a href="#">Поддержка</a>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>Подписка на новости</h3>
+
+      <p>
+        Будьте в курсе акций
+        и новинок
+      </p>
+
+      <div class="subscribe">
+
+        <input
+          type="email"
+          placeholder="Ваш email"
+        >
+
+        <button>
+          ➤
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <p>
+      © 2026 MY SHOP.
+      Все права защищены.
+    </p>
+
+    <div class="footer-links">
+      <a href="#">
+        Политика конфиденциальности
+      </a>
+
+      <a href="#">
+        Пользовательское соглашение
+      </a>
+    </div>
+
+  </div>
+
+</footer>
+
+<div id="toast" class="toast"></div>
+
+</body>
+</html>
