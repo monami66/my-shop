@@ -5,6 +5,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
+const { CloudinaryStorage } =
+  require("multer-storage-cloudinary");
+
+const cloudinary =
+  require("cloudinary").v2;
 
 const User = require("./models/User");
 const Product = require("./models/Product");
@@ -12,6 +17,14 @@ const Order = require("./models/Order");
 const Message = require("./models/Message");
 
 const app = express();
+cloudinary.config({
+
+  cloud_name: "dslszvo6q",
+
+  api_key: "376598822626213",
+
+  api_secret: "IfT1MpJUStPJCPcvviGQbAYPIh8"
+});
 
 const server = http.createServer(app);
 
@@ -26,14 +39,22 @@ app.use(express.json());
 app.use(express.static("client"));
 app.use("/uploads", express.static("uploads"));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
+const storage =
+  new CloudinaryStorage({
 
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
+    cloudinary,
+
+    params: {
+
+      folder: "my-shop",
+
+      allowed_formats: [
+        "jpg",
+        "png",
+        "jpeg",
+        "webp"
+      ]
+    }
 });
 
 const upload = multer({ storage });
@@ -174,7 +195,7 @@ app.post("/upload", upload.single("image"), (req, res) => {
   try {
     res.json({
       message: "Фото загружено",
-      imageUrl: "/uploads/" + req.file.filename
+      imageUrl: req.file.path
     });
 
   } catch (err) {
@@ -402,7 +423,7 @@ app.post("/create-order", async (req, res) => {
     });
 
     await order.save();
-    // 🔔 УВЕДОМЛЕНИЯ ПРОДАВЦАМ
+   
 
 for (const item of order.items) {
 
@@ -565,11 +586,6 @@ app.get("/admin/stats", async (req, res) => {
 });
 
 
-// ===============================
-// 💬 ЧАТ И УВЕДОМЛЕНИЯ
-// ===============================
-
-// 📩 ОТПРАВИТЬ СООБЩЕНИЕ
 app.post("/messages", async (req, res) => {
   try {
     const {
@@ -607,7 +623,7 @@ app.post("/messages", async (req, res) => {
 });
 
 
-// 💬 ПОЛУЧИТЬ ЧАТ ПО ТОВАРУ И ПОЛЬЗОВАТЕЛЯМ
+
 app.get("/messages/chat", async (req, res) => {
   try {
     const {
@@ -862,6 +878,10 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log("Сервер запущен");
+server.listen(PORT, () => {
+
+  console.log(
+    "Сервер запущен на " + PORT
+  );
 });
+imageUrl: "/uploads/" + req.file.filename
