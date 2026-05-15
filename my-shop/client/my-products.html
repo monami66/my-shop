@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Мои товары</title>
 
   <style>
@@ -469,6 +470,159 @@
       #00ffd5,
       #00d2a8
     );
+}
+@media (max-width: 900px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar {
+
+    height: auto;
+
+    padding: 15px;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 28px;
+  }
+
+  .nav-links {
+
+    width: 100%;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 15px;
+  }
+
+  .page-header {
+
+    margin: 15px;
+
+    padding: 25px 20px;
+
+    text-align: center;
+  }
+
+  .page-header h1 {
+
+    font-size: 32px;
+  }
+
+  .page-header p {
+
+    font-size: 16px;
+  }
+
+  .products {
+
+    grid-template-columns: 1fr;
+
+    padding: 0 15px;
+
+    gap: 20px;
+  }
+
+  .card {
+
+    width: 100%;
+
+    padding: 18px;
+  }
+
+  .main-image {
+
+    height: 240px;
+  }
+
+  .mini-gallery {
+
+    justify-content: center;
+  }
+
+  .mini-gallery img {
+
+    width: 60px;
+
+    height: 60px;
+  }
+
+  .card h3 {
+
+    font-size: 22px;
+  }
+
+  .price {
+
+    font-size: 28px;
+  }
+
+  .btn-card {
+
+    font-size: 16px;
+  }
+
+  .modal {
+
+    padding: 10px;
+  }
+
+  .modal-content {
+
+    width: 100%;
+
+    padding: 20px;
+  }
+
+  .modal-content h2 {
+
+    font-size: 28px;
+  }
+
+  .modal-buttons {
+
+    flex-direction: column;
+  }
+
+  .modal-content input,
+  .modal-content textarea,
+  .modal-content select,
+  .save-btn,
+  .close-btn {
+
+    font-size: 16px;
+  }
+
+  .edit-preview {
+
+    justify-content: center;
+  }
+
+  .edit-preview img {
+
+    width: 80px;
+
+    height: 80px;
+  }
+
+  .dropdown {
+
+    width: 100%;
+
+    right: 0;
+  }
 }
   </style>
 </head>

@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Корзина</title>
 
   <style>
@@ -421,6 +422,148 @@
       #00ffd5,
       #00d2a8
     );
+}
+@media (max-width: 900px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar {
+
+    height: auto;
+
+    padding: 15px;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 28px;
+  }
+
+  .nav-links {
+
+    width: 100%;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 15px;
+  }
+
+  .page-header {
+
+    margin: 15px;
+
+    padding: 25px 20px;
+
+    text-align: center;
+  }
+
+  .page-header h1 {
+
+    font-size: 32px;
+  }
+
+  .page-header p {
+
+    font-size: 16px;
+  }
+
+  .container {
+
+    flex-direction: column;
+
+    padding: 0 15px;
+
+    margin: 15px auto;
+  }
+
+  .cart-card {
+
+    flex-direction: column;
+
+    padding: 18px;
+  }
+
+  .cart-card img {
+
+    width: 100%;
+
+    height: 240px;
+  }
+
+  .cart-info h2 {
+
+    font-size: 24px;
+  }
+
+  .price {
+
+    font-size: 28px;
+  }
+
+  .quantity-box {
+
+    justify-content: center;
+  }
+
+  .remove-btn {
+
+    width: 100%;
+  }
+
+  .summary {
+
+    width: 100%;
+
+    min-width: 100%;
+
+    position: static;
+
+    padding: 20px;
+  }
+
+  .summary-total {
+
+    font-size: 24px;
+  }
+
+  .checkout-btn {
+
+    font-size: 16px;
+  }
+
+  .empty {
+
+    padding: 50px 15px;
+  }
+
+  .empty h2 {
+
+    font-size: 32px;
+  }
+
+  .dropdown {
+
+    width: 100%;
+
+    right: 0;
+  }
+
+  input,
+  button {
+
+    font-size: 16px;
+  }
 }
   </style>
 </head>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Чат</title>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -413,6 +414,116 @@
   background:
     rgba(0,255,204,0.75);
 }
+@media (max-width: 900px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar {
+
+    height: auto;
+
+    padding: 15px;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 28px;
+  }
+
+  .nav-links {
+
+    width: 100%;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 15px;
+  }
+
+  .page-header {
+
+    margin: 15px;
+
+    padding: 25px 20px;
+
+    text-align: center;
+  }
+
+  .page-header h1 {
+
+    font-size: 30px;
+  }
+
+  .page-header p {
+
+    font-size: 15px;
+  }
+
+  .chat-box {
+
+    margin: 15px;
+
+    padding: 18px;
+  }
+
+  .product-info {
+
+    flex-direction: column;
+
+    text-align: center;
+  }
+
+  .product-info img {
+
+    width: 100%;
+
+    height: 220px;
+  }
+
+  .messages {
+
+    height: 380px;
+
+    padding: 14px;
+  }
+
+  .msg {
+
+    max-width: 90%;
+
+    font-size: 15px;
+  }
+
+  .send-box {
+
+    flex-direction: column;
+  }
+
+  .send-box input,
+  .send-box button {
+
+    width: 100%;
+
+    font-size: 16px;
+  }
+
+  .dropdown {
+
+    width: 100%;
+
+    right: 0;
+  }
+}
   </style>
 </head>
 
@@ -749,4 +860,3 @@ start();
 
 </body>
 </html>
-function renderMessage(m)
