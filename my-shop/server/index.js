@@ -277,6 +277,66 @@ app.get("/products", async (req, res) => {
     });
   }
 });
+app.get("/admin/reviews", async (req, res) => {
+
+  try {
+
+    const products =
+      await Product.find();
+
+    let reviews = [];
+
+    products.forEach(product => {
+
+      if (!Array.isArray(product.reviews)) return;
+
+      product.reviews.forEach(review => {
+
+        reviews.push({
+
+          productId:
+            String(product._id),
+
+          productTitle:
+            product.title || "Без названия",
+
+          reviewId:
+            review._id
+              ? String(review._id)
+              : "",
+
+          userName:
+            review.userName || "Пользователь",
+
+          text:
+            review.text || "Без текста",
+
+          rating:
+            review.rating || 5
+        });
+
+      });
+
+    });
+
+    res.json(
+      reviews.reverse()
+    );
+
+  } catch (err) {
+
+    console.log(
+      "Ошибка /admin/reviews:",
+      err
+    );
+
+    res.status(500).json({
+      message: err.message
+    });
+
+  }
+
+});
 app.delete("/admin/reviews/:productId/:reviewId", async (req, res) => {
 
   try {
@@ -316,38 +376,7 @@ app.delete("/admin/reviews/:productId/:reviewId", async (req, res) => {
 
 });
 
-app.delete("/admin/reviews/:productId/:reviewId", async (req, res) => {
 
-  try {
-
-    const product =
-      await Product.findById(req.params.productId);
-
-    if (!product) {
-
-      return res.status(404).json({
-        message: "Товар не найден"
-      });
-    }
-
-    product.reviews =
-      product.reviews.filter(
-        r => r._id.toString() !== req.params.reviewId
-      );
-
-    await product.save();
-
-    res.json({
-      message: "Отзыв удалён"
-    });
-
-  } catch (err) {
-
-    res.status(500).json({
-      message: err.message
-    });
-  }
-});
 app.get("/products/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
