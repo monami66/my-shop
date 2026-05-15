@@ -1305,7 +1305,10 @@ async function loadReviews() {
     if (reviews.length === 0) {
 
       container.innerHTML = `
-        <p style="color:#888;">
+        <p style="
+          color:#888;
+          text-align:center;
+        ">
           Отзывов пока нет
         </p>
       `;
@@ -1315,25 +1318,53 @@ async function loadReviews() {
 
     reviews.forEach(review => {
 
+      const stars =
+        "⭐".repeat(
+          Number(review.rating) || 5
+        );
+
       container.innerHTML += `
 
         <div class="review-card">
 
           <h3>
+            📦 Товар:
             ${review.productTitle}
           </h3>
 
           <p>
-            👤 ${review.userName || "Пользователь"}
+            👤 Кто написал:
+            <b>
+              ${review.userName || "Пользователь"}
+            </b>
           </p>
 
           <p>
-            ⭐ ${review.rating || 5}/5
+            ⭐ Оценка:
+            <b>
+              ${stars}
+            </b>
+
+            (${review.rating || 5}/5)
           </p>
 
           <p>
-            ${review.text || ""}
+            💬 Комментарий:
           </p>
+
+          <div style="
+            background:#071111;
+            padding:14px;
+            border-radius:12px;
+            border:1px solid rgba(0,255,204,0.15);
+            color:#ddd;
+            line-height:1.5;
+            margin-top:8px;
+          ">
+
+            ${review.text || "Без текста"}
+
+          </div>
 
           <button
             class="review-delete"
@@ -1342,7 +1373,7 @@ async function loadReviews() {
               '${review._id}'
             )"
           >
-            🗑 Удалить отзыв
+            🗑 Удалить комментарий
           </button>
 
         </div>
@@ -1352,7 +1383,10 @@ async function loadReviews() {
   } catch {
 
     container.innerHTML = `
-      <p style="color:red;">
+      <p style="
+        color:red;
+        text-align:center;
+      ">
         Ошибка загрузки отзывов
       </p>
     `;
