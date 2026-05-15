@@ -277,7 +277,71 @@ app.get("/products", async (req, res) => {
     });
   }
 });
+app.get("/admin/reviews", async (req, res) => {
 
+  try {
+
+    const products =
+      await Product.find();
+
+    let reviews = [];
+
+    products.forEach(product => {
+
+      (product.reviews || []).forEach(review => {
+
+        reviews.push({
+          productId: product._id,
+          productTitle: product.title,
+          ...review
+        });
+      });
+    });
+
+    reviews.reverse();
+
+    res.json(reviews);
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: err.message
+    });
+  }
+});
+
+app.delete("/admin/reviews/:productId/:reviewId", async (req, res) => {
+
+  try {
+
+    const product =
+      await Product.findById(req.params.productId);
+
+    if (!product) {
+
+      return res.status(404).json({
+        message: "Товар не найден"
+      });
+    }
+
+    product.reviews =
+      product.reviews.filter(
+        r => r._id.toString() !== req.params.reviewId
+      );
+
+    await product.save();
+
+    res.json({
+      message: "Отзыв удалён"
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: err.message
+    });
+  }
+});
 app.get("/products/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);

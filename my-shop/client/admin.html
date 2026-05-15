@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Админка</title>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -352,6 +353,253 @@ body {
       #00d2a8
     );
 }
+@media (max-width: 900px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar {
+
+    height: auto;
+
+    padding: 15px;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 28px;
+  }
+
+  .nav-links {
+
+    width: 100%;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 15px;
+  }
+
+  .admin-container {
+
+    margin: 15px;
+
+    padding: 20px;
+  }
+
+  .admin-header {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 12px;
+  }
+
+  .admin-header h1 {
+
+    font-size: 32px;
+  }
+
+  .stats-grid {
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+  }
+
+  .stat-card {
+
+    padding: 22px;
+  }
+
+  .stat-card h2 {
+
+    font-size: 34px;
+  }
+
+  .stat-card p {
+
+    font-size: 15px;
+  }
+
+  .admin-actions {
+
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .admin-actions button {
+
+    width: 100%;
+
+    font-size: 16px;
+  }
+
+  .users-table,
+  .products-table,
+  .orders-table {
+
+    display: block;
+
+    overflow-x: auto;
+
+    white-space: nowrap;
+
+    border-radius: 12px;
+  }
+
+  table {
+
+    min-width: 700px;
+  }
+
+  th,
+  td {
+
+    font-size: 14px;
+
+    padding: 12px;
+  }
+
+  .search-box {
+
+    width: 100%;
+  }
+
+  .search-box input {
+
+    width: 100%;
+
+    font-size: 16px;
+  }
+
+  .filters {
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .filters select,
+  .filters button {
+
+    width: 100%;
+
+    font-size: 16px;
+  }
+
+  .modal {
+
+    padding: 10px;
+  }
+
+  .modal-content {
+
+    width: 100%;
+
+    padding: 20px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+  }
+
+  .modal-content h2 {
+
+    font-size: 28px;
+  }
+
+  .modal-buttons {
+
+    flex-direction: column;
+  }
+
+  .modal-buttons button {
+
+    width: 100%;
+  }
+
+  .dropdown {
+
+    width: 100%;
+
+    right: 0;
+  }
+}
+.reviews-section {
+
+  margin-top: 35px;
+
+  background:
+    rgba(255,255,255,0.03);
+
+  padding: 25px;
+
+  border-radius: 20px;
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+}
+
+.review-card {
+
+  padding: 18px;
+
+  border-radius: 16px;
+
+  background:
+    rgba(255,255,255,0.04);
+
+  margin-top: 15px;
+
+  border:
+    1px solid rgba(0,255,204,0.12);
+}
+
+.review-card h3 {
+
+  margin-top: 0;
+
+  color:
+    #00ffcc;
+}
+
+.review-card p {
+
+  color:
+    #ccc;
+}
+
+.review-delete {
+
+  margin-top: 12px;
+
+  padding: 10px 16px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background:
+    crimson;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-weight: bold;
+}
   </style>
 </head>
 
@@ -455,6 +703,15 @@ if (
     <div id="ordersList"></div>
 
   </div>
+  <div class="reviews-section">
+
+  <h1 class="title">
+     Отзывы
+  </h1>
+
+  <div id="reviewsList"></div>
+
+</div>
 
 
 
@@ -1028,6 +1285,99 @@ async function loadProducts() {
     `;
   });
 }
+async function loadReviews() {
+
+  const container =
+    document.getElementById("reviewsList");
+
+  if (!container) return;
+
+  try {
+
+    const res =
+      await fetch("/admin/reviews");
+
+    const reviews =
+      await res.json();
+
+    container.innerHTML = "";
+
+    if (reviews.length === 0) {
+
+      container.innerHTML = `
+        <p style="color:#888;">
+          Отзывов пока нет
+        </p>
+      `;
+
+      return;
+    }
+
+    reviews.forEach(review => {
+
+      container.innerHTML += `
+
+        <div class="review-card">
+
+          <h3>
+            ${review.productTitle}
+          </h3>
+
+          <p>
+            👤 ${review.userName || "Пользователь"}
+          </p>
+
+          <p>
+            ⭐ ${review.rating || 5}/5
+          </p>
+
+          <p>
+            ${review.text || ""}
+          </p>
+
+          <button
+            class="review-delete"
+            onclick="deleteReview(
+              '${review.productId}',
+              '${review._id}'
+            )"
+          >
+            🗑 Удалить отзыв
+          </button>
+
+        </div>
+      `;
+    });
+
+  } catch {
+
+    container.innerHTML = `
+      <p style="color:red;">
+        Ошибка загрузки отзывов
+      </p>
+    `;
+  }
+}
+
+async function deleteReview(productId, reviewId) {
+
+  const agree =
+    confirm("Удалить отзыв?");
+
+  if (!agree) return;
+
+  await fetch(
+    "/admin/reviews/" +
+    productId +
+    "/" +
+    reviewId,
+    {
+      method: "DELETE"
+    }
+  );
+
+  loadReviews();
+}
 
 async function deleteProduct(id) {
 
@@ -1051,6 +1401,7 @@ loadStats();
 loadOrders();
 loadUsers();
 loadProducts();
+loadReviews();
 
 </script>
 
