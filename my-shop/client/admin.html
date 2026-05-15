@@ -606,14 +606,20 @@ body {
 <body>
 
 <script>
-const adminEmail = "sobakizomb@gmail.com";
+const admins = [
+
+  "sobakizomb@gmail.com",
+
+  "nigmetovdaniar78@gmail.com"
+
+];
 
 const adminUser =
   JSON.parse(localStorage.getItem("user"));
 
 if (
   !adminUser ||
-  adminUser.email !== adminEmail
+  !admins.includes(adminUser.email)
 ) {
   alert("У вас нет доступа");
   window.location.href = "/index.html";

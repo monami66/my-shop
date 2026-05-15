@@ -659,7 +659,10 @@ async function checkUser() {
         <a href="/my-products.html"> Мои товары</a>
         <a href="/profile.html"> Личный кабинет</a>
 
-        ${user.email === "sobakizomb@gmail.com" ? `
+        ${[
+  "sobakizomb@gmail.com",
+  "nigmetovdaniar78@gmail.com"
+].includes(user.email) ? `
           <a href="/admin.html"> Админка</a>
         ` : ""}
 

@@ -596,7 +596,10 @@ async function checkUser() {
            Личный кабинет
         </a>
 
-        ${user.email === "sobakizomb@gmail.com" ? `
+        ${[
+  "sobakizomb@gmail.com",
+  "nigmetovdaniar78@gmail.com"
+].includes(user.email) ? `
           <a href="/admin.html">
              Админка
           </a>
