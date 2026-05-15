@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Товары</title>
 
   <style>
@@ -562,6 +563,181 @@
       #00ffd5,
       #00d2a8
     );
+}
+@media (max-width: 900px) {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .navbar {
+
+    height: auto;
+
+    padding: 15px;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .logo {
+    font-size: 28px;
+  }
+
+  .nav-links {
+
+    width: 100%;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 15px;
+  }
+
+  .page-header {
+
+    margin: 15px;
+
+    padding: 25px 20px;
+
+    text-align: center;
+  }
+
+  .page-header h1 {
+
+    font-size: 32px;
+  }
+
+  .page-header p {
+
+    font-size: 16px;
+  }
+
+  .container {
+
+    flex-direction: column;
+
+    padding: 0 15px;
+
+    margin: 15px auto;
+  }
+
+  .filters {
+
+    width: 100%;
+
+    min-width: 100%;
+
+    position: static;
+
+    padding: 18px;
+  }
+
+  .products-top {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 10px;
+  }
+
+  .products {
+
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
+  .card {
+
+    width: 100%;
+  }
+
+  .main-image {
+
+    height: 240px;
+  }
+
+  .gallery {
+
+    padding-bottom: 5px;
+  }
+
+  .pagination {
+
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .pagination button {
+
+    width: 100%;
+  }
+
+  .footer-container {
+
+    grid-template-columns: 1fr;
+
+    padding: 0 20px 30px;
+  }
+
+  .footer-bottom {
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    text-align: center;
+  }
+
+  .footer-links {
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .subscribe {
+
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .subscribe input,
+  .subscribe button {
+
+    width: 100%;
+
+    border-radius: 8px;
+  }
+
+  .subscribe button {
+
+    height: 50px;
+  }
+
+  .dropdown {
+
+    width: 100%;
+
+    right: 0;
+  }
+
+  input,
+  select,
+  button {
+
+    font-size: 16px;
+  }
 }
   </style>
 </head>
