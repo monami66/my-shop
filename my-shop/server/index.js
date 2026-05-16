@@ -389,6 +389,27 @@ app.get("/products/:id", async (req, res) => {
     });
   }
 });
+app.delete("/orders/:id", async (req, res) => {
+
+  try {
+
+    await Order.findByIdAndDelete(
+      req.params.id
+    );
+
+    res.json({
+      message: "Заказ удалён"
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      message: err.message
+    });
+
+  }
+
+});
 
 app.post("/products/:id/reviews", async (req, res) => {
   try {
