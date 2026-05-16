@@ -1159,6 +1159,20 @@ function openBuyerChat(
   buyerName
 ) {
 
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  if (!user) return;
+
+  window.location.href =
+
+    `/chat.html?productId=${productId}` +
+
+    `&sellerEmail=${buyerEmail}` +
+
+    `&sellerName=${buyerName}`;
+} {
+
   window.location.href =
     `/chat.html?productId=${productId}&sellerEmail=${buyerEmail}&sellerName=${buyerName}`;
 }
