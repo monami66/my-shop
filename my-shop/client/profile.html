@@ -712,10 +712,14 @@
 
 <div class="orders">
 
-  <h2>🛒 Заказы моих товаров</h2>
+  <h2>Мои заказы</h2>
 
   <div id="ordersList"></div>
+<h2 style="margin-top:40px;">
+   Заказы моих товаров
+</h2>
 
+<div id="sellerOrders"></div>
 </div>
 
 <div id="toast" class="toast"></div>
@@ -999,6 +1003,8 @@ async function loadOrders() {
       </div>
     `;
   });
+}
+
   async function loadSellerOrders() {
 
   const user =
@@ -1024,9 +1030,8 @@ async function loadOrders() {
     (order.items || []).forEach(item => {
 
       if (
-        item.user &&
-        item.user.email === user.email
-      ) {
+  item.user?.email === user.email
+) {
 
         const image =
           item.images &&
@@ -1075,14 +1080,14 @@ async function loadOrders() {
                 class="finish-btn"
                 onclick="finishOrder('${order._id}')"
               >
-                ✅ Продажа завершена
+                 Продажа завершена
               </button>
 
               <button
                 class="cancel-btn"
                 onclick="cancelOrder('${order._id}')"
               >
-                ❌ Продажа отменена
+                 Продажа отменена
               </button>
 
               <button
@@ -1095,7 +1100,7 @@ async function loadOrders() {
                   )
                 "
               >
-                💬 Написать покупателю
+                 Написать покупателю
               </button>
 
             </div>
@@ -1131,6 +1136,7 @@ async function finishOrder(id) {
       status: "Завершён"
     })
   });
+
 
   loadSellerOrders();
 }
@@ -1171,13 +1177,7 @@ function openBuyerChat(
     `&sellerEmail=${buyerEmail}` +
 
     `&sellerName=${buyerName}`;
-} {
-
-  window.location.href =
-    `/chat.html?productId=${productId}&sellerEmail=${buyerEmail}&sellerName=${buyerName}`;
-}
-
-}
+} 
 
 updateCartCount();
 checkUser();
