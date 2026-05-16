@@ -628,22 +628,6 @@ app.get("/orders", async (req, res) => {
     });
   }
 });
-
-app.get("/my-orders/:email", async (req, res) => {
-  try {
-    const orders = await Order.find({
-      "user.email": req.params.email
-    });
-
-    res.json(orders);
-
-  } catch (err) {
-    res.status(500).json({
-      error: err.message
-    });
-  }
-});
-
 app.put("/orders/:id/status", async (req, res) => {
   try {
     const { status } = req.body;
