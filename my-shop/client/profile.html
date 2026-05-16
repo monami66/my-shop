@@ -346,7 +346,178 @@
     .toast.error {
       background: crimson;
     }
+.seller-order {
 
+  background:
+    rgba(255,255,255,0.03);
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+
+  border-radius: 18px;
+
+  padding: 20px;
+
+  margin-top: 18px;
+}
+
+.seller-order img {
+
+  width: 120px;
+
+  height: 120px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+
+  margin-top: 12px;
+}
+
+.seller-buttons {
+
+  display: flex;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+  margin-top: 18px;
+}
+
+.finish-btn,
+.cancel-btn,
+.chat-btn,
+.delete-order-btn {
+
+  flex: 1;
+
+  min-width: 180px;
+
+  padding: 14px 18px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  font-size: 15px;
+
+  transition: 0.25s;
+
+  box-shadow:
+    0 0 18px rgba(0,0,0,0.25);
+}
+
+.finish-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #00ffcc,
+      #00aa88
+    );
+
+  color: black;
+}
+
+.cancel-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      crimson,
+      #8b001f
+    );
+
+  color: white;
+}
+
+.chat-btn {
+
+  background:
+    rgba(255,255,255,0.08);
+
+  color:
+    #00ffcc;
+
+  border:
+    1px solid rgba(0,255,204,0.35);
+}
+
+.delete-order-btn {
+
+  width: 100%;
+
+  margin-top: 15px;
+
+  background:
+    #111;
+
+  color:
+    #ff6b86;
+
+  border:
+    1px solid rgba(255,80,120,0.3);
+}
+
+.finish-btn:hover,
+.cancel-btn:hover,
+.chat-btn:hover,
+.delete-order-btn:hover {
+
+  transform:
+    translateY(-3px);
+}
+
+.delete-order-btn:hover {
+
+  background:
+    crimson;
+
+  color:
+    white;
+}
+
+.status-final {
+
+  margin-top: 18px;
+
+  padding: 14px;
+
+  border-radius: 12px;
+
+  font-weight: bold;
+
+  text-align: center;
+}
+
+.status-final.done {
+
+  background:
+    rgba(0,255,170,0.15);
+
+  color:
+    #00ffcc;
+
+  border:
+    1px solid rgba(0,255,204,0.35);
+}
+
+.status-final.cancel {
+
+  background:
+    rgba(220,20,60,0.15);
+
+  color:
+    #ff6b86;
+
+  border:
+    1px solid rgba(220,20,60,0.35);
+}
     @media (max-width: 900px) {
       .navbar {
         padding: 15px 20px;
@@ -403,158 +574,7 @@
 }
 @media (max-width: 900px) {
 
-  body {
-    overflow-x: hidden;
-  }
-
-  .navbar {
-
-    height: auto;
-
-    padding: 15px;
-
-    flex-direction: column;
-
-    gap: 15px;
-  }
-
-  .logo {
-    font-size: 28px;
-  }
-
-  .nav-links {
-
-    width: 100%;
-
-    justify-content: center;
-
-    gap: 18px;
-
-    flex-wrap: wrap;
-  }
-
-  .nav-links a {
-    font-size: 15px;
-  }
-
-  .page-header {
-
-    margin: 15px;
-
-    padding: 25px 20px;
-
-    text-align: center;
-  }
-
-  .page-header h1 {
-
-    font-size: 32px;
-  }
-
-  .page-header p {
-
-    font-size: 16px;
-  }
-
-  .profile {
-
-    margin: 15px;
-
-    padding: 20px;
-  }
-
-  .avatar {
-
-    width: 100px;
-
-    height: 100px;
-
-    font-size: 38px;
-  }
-
-  .profile h2 {
-
-    font-size: 28px;
-  }
-
-  .info {
-
-    padding: 15px;
-  }
-
-  .info p {
-
-    font-size: 15px;
-
-    word-break: break-word;
-  }
-
-  .change-name-input,
-  .save-btn,
-  .logout-btn {
-
-    font-size: 16px;
-  }
-
-  .orders {
-
-    margin: 15px;
-
-    padding: 20px;
-  }
-
-  .orders h2 {
-
-    font-size: 28px;
-  }
-
-  .order {
-
-    padding: 15px;
-  }
-
-  .order-header {
-
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 8px;
-  }
-
-  .item {
-
-    flex-direction: column;
-
-    align-items: flex-start;
-  }
-
-  .item img {
-
-    width: 100%;
-
-    height: 220px;
-  }
-
-  .item-info {
-
-    width: 100%;
-  }
-
-  .total {
-
-    text-align: left;
-
-    font-size: 22px;
-  }
-
-  .dropdown {
-
-    width: 100%;
-
-    right: 0;
-  }
-  .seller-order {
+.seller-order {
 
   background:
     rgba(255,255,255,0.03);
@@ -593,121 +613,138 @@
   margin-top: 18px;
 }
 
-.finish-btn {
+.finish-btn,
+.cancel-btn,
+.chat-btn,
+.delete-order-btn {
 
-  background:
-    #00cc88;
+  flex: 1;
 
-  color: black;
+  min-width: 180px;
+
+  padding: 14px 18px;
 
   border: none;
 
-  padding: 12px 18px;
-
-  border-radius: 10px;
+  border-radius: 14px;
 
   cursor: pointer;
 
   font-weight: bold;
+
+  font-size: 15px;
+
+  transition: 0.25s;
+
+  box-shadow:
+    0 0 18px rgba(0,0,0,0.25);
+}
+
+.finish-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #00ffcc,
+      #00aa88
+    );
+
+  color: black;
 }
 
 .cancel-btn {
 
   background:
-    crimson;
+    linear-gradient(
+      135deg,
+      crimson,
+      #8b001f
+    );
 
   color: white;
-
-  border: none;
-
-  padding: 12px 18px;
-
-  border-radius: 10px;
-
-  cursor: pointer;
-
-  font-weight: bold;
 }
 
 .chat-btn {
 
   background:
+    rgba(255,255,255,0.08);
+
+  color:
     #00ffcc;
 
-  color: black;
-
-  border: none;
-
-  padding: 12px 18px;
-
-  border-radius: 10px;
-
-  cursor: pointer;
-
-  font-weight: bold;
-}
-.status-final {
-  margin-top: 18px;
-  padding: 14px;
-  border-radius: 12px;
-  font-weight: bold;
-  text-align: center;
+  border:
+    1px solid rgba(0,255,204,0.35);
 }
 
-.status-final.done {
-  background: rgba(0, 255, 170, 0.15);
-  color: #00ffcc;
-  border: 1px solid rgba(0, 255, 204, 0.35);
-}
-
-.status-final.cancel {
-  background: rgba(220, 20, 60, 0.15);
-  color: #ff6b86;
-  border: 1px solid rgba(220, 20, 60, 0.35);
-}
-
-.finish-btn,
-.cancel-btn,
-.chat-btn {
-  flex: 1;
-  min-width: 180px;
-  transition: 0.25s;
-  box-shadow: 0 0 18px rgba(0,0,0,0.25);
-}
-
-.finish-btn:hover,
-.cancel-btn:hover,
-.chat-btn:hover {
-  transform: translateY(-3px);
-}
 .delete-order-btn {
 
   width: 100%;
 
   margin-top: 15px;
 
-  background: #111;
+  background:
+    #111;
 
-  color: #ff6b86;
+  color:
+    #ff6b86;
 
-  border: 1px solid rgba(255,80,120,0.3);
+  border:
+    1px solid rgba(255,80,120,0.3);
+}
+
+.finish-btn:hover,
+.cancel-btn:hover,
+.chat-btn:hover,
+.delete-order-btn:hover {
+
+  transform:
+    translateY(-3px);
+}
+
+.delete-order-btn:hover {
+
+  background:
+    crimson;
+
+  color:
+    white;
+}
+
+.status-final {
+
+  margin-top: 18px;
 
   padding: 14px;
 
   border-radius: 12px;
 
-  cursor: pointer;
-
   font-weight: bold;
 
-  transition: 0.25s;
+  text-align: center;
 }
 
-.delete-order-btn:hover {
+.status-final.done {
 
-  background: crimson;
+  background:
+    rgba(0,255,170,0.15);
 
-  color: white;
+  color:
+    #00ffcc;
+
+  border:
+    1px solid rgba(0,255,204,0.35);
+}
+
+.status-final.cancel {
+
+  background:
+    rgba(220,20,60,0.15);
+
+  color:
+    #ff6b86;
+
+  border:
+    1px solid rgba(220,20,60,0.35);
 }
 }
   </style>
