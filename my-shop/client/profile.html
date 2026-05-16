@@ -518,6 +518,65 @@
   border:
     1px solid rgba(220,20,60,0.35);
 }
+.buyer-buttons {
+
+  display: flex;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+  margin-top: 18px;
+}
+
+.buyer-cancel-btn,
+.buyer-chat-btn {
+
+  flex: 1;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  transition: 0.25s;
+}
+
+.buyer-cancel-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      crimson,
+      #8b001f
+    );
+
+  color: white;
+}
+
+.buyer-chat-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #00ffcc,
+      #00aa88
+    );
+
+  color: black;
+}
+
+.buyer-cancel-btn:hover,
+.buyer-chat-btn:hover {
+
+  transform:
+    translateY(-3px);
+}
     @media (max-width: 900px) {
       .navbar {
         padding: 15px 20px;
@@ -745,6 +804,65 @@
 
   border:
     1px solid rgba(220,20,60,0.35);
+}
+.buyer-buttons {
+
+  display: flex;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+  margin-top: 18px;
+}
+
+.buyer-cancel-btn,
+.buyer-chat-btn {
+
+  flex: 1;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  transition: 0.25s;
+}
+
+.buyer-cancel-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      crimson,
+      #8b001f
+    );
+
+  color: white;
+}
+
+.buyer-chat-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #00ffcc,
+      #00aa88
+    );
+
+  color: black;
+}
+
+.buyer-cancel-btn:hover,
+.buyer-chat-btn:hover {
+
+  transform:
+    translateY(-3px);
 }
 }
   </style>
@@ -1097,9 +1215,38 @@ async function loadOrders() {
         </div>
 
         <div class="total">
-          Итого: ${order.total || 0} ₸
-        </div>
+  Итого: ${order.total || 0} ₸
+</div>
 
+<div class="buyer-buttons">
+
+  ${order.status !== "Отменён"
+    && order.status !== "Завершён"
+    ? `
+      <button
+        class="buyer-cancel-btn"
+        onclick="cancelBuyerOrder('${order._id}')"
+      >
+        ❌ Отменить заказ
+      </button>
+    `
+    : ""
+  }
+
+  <button
+    class="buyer-chat-btn"
+    onclick="
+      openSellerChat(
+        '${order.items?.[0]?._id}',
+        '${order.items?.[0]?.user?.email}',
+        '${order.items?.[0]?.user?.name}'
+      )
+    "
+  >
+    💬 Связаться с продавцом
+  </button>
+
+</div>
       </div>
     `;
   });
@@ -1314,6 +1461,43 @@ async function deleteOrder(id) {
   });
 
   loadSellerOrders();
+}
+async function cancelBuyerOrder(id) {
+
+  const agree =
+    confirm("Отменить заказ?");
+
+  if (!agree) return;
+
+  await fetch("/orders/" + id + "/status", {
+
+    method: "PUT",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      status: "Отменён"
+    })
+  });
+
+  loadOrders();
+}
+
+function openSellerChat(
+  productId,
+  sellerEmail,
+  sellerName
+) {
+
+  window.location.href =
+
+    `/chat.html?productId=${productId}` +
+
+    `&sellerEmail=${sellerEmail}` +
+
+    `&sellerName=${sellerName}`;
 }
 
 updateCartCount();
