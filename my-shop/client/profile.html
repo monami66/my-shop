@@ -1144,7 +1144,7 @@ async function loadOrders() {
           <div class="seller-order">
 
             <h3>
-              📦 ${item.title}
+               ${item.title}
             </h3>
 
             <img src="${image}">
@@ -1179,8 +1179,8 @@ ${order.status === "Завершён" || order.status === "Отменён" ? `
   <div class="status-final ${order.status === "Завершён" ? "done" : "cancel"}">
 
     ${order.status === "Завершён"
-      ? "✅ Продажа завершена"
-      : "❌ Продажа отменена"
+      ? " Продажа завершена"
+      : " Продажа отменена"
     }
 
   </div>
@@ -1189,7 +1189,7 @@ ${order.status === "Завершён" || order.status === "Отменён" ? `
     class="delete-order-btn"
     onclick="deleteOrder('${order._id}')"
   >
-    🗑 Удалить заказ
+     Удалить заказ
   </button>
 
 ` : `
@@ -1200,14 +1200,14 @@ ${order.status === "Завершён" || order.status === "Отменён" ? `
       class="finish-btn"
       onclick="finishOrder('${order._id}')"
     >
-      ✅ Завершить продажу
+       Завершить продажу
     </button>
 
     <button
       class="cancel-btn"
       onclick="cancelOrder('${order._id}')"
     >
-      ❌ Отменить продажу
+       Отменить продажу
     </button>
 
     <button
@@ -1220,7 +1220,7 @@ ${order.status === "Завершён" || order.status === "Отменён" ? `
         )
       "
     >
-      💬 Связаться с покупателем
+       Связаться с покупателем
     </button>
 
   </div>
