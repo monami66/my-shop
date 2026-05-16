@@ -436,15 +436,22 @@ app.post("/products/:id/reviews", async (req, res) => {
   }
 });
 
-app.get("/my-products/:email", async (req, res) => {
-  try {
-    const products = await Product.find({
-      "user.email": req.params.email
-    });
+app.get("/my-orders/:email", async (req, res) => {
 
-    res.json(products);
+  try {
+
+    const orders =
+      await Order.find({
+
+        userEmail:
+          req.params.email
+
+      });
+
+    res.json(orders);
 
   } catch (err) {
+
     res.status(500).json({
       error: err.message
     });
@@ -543,9 +550,14 @@ app.delete("/products/:id", async (req, res) => {
 app.post("/create-order", async (req, res) => {
   try {
     const order = new Order({
-      ...req.body,
-      status: "Новый"
-    });
+
+  ...req.body,
+
+  userEmail:
+    req.body.userEmail,
+
+  status: "Новый"
+});
 
     await order.save();
    
