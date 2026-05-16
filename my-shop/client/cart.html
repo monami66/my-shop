@@ -907,14 +907,20 @@ async function checkout() {
           "Content-Type": "application/json"
         },
 
-        body: JSON.stringify({
-          name,
-          phone,
-          address,
-          items: cart,
-          total,
-          user
-        })
+  body: JSON.stringify({
+
+  name,
+  phone,
+  address,
+
+  items: cart,
+
+  total,
+
+  userEmail:
+    user.email
+
+})
       });
 
     const data =
