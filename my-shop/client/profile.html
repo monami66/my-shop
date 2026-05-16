@@ -646,6 +646,40 @@
 
   font-weight: bold;
 }
+.status-final {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.status-final.done {
+  background: rgba(0, 255, 170, 0.15);
+  color: #00ffcc;
+  border: 1px solid rgba(0, 255, 204, 0.35);
+}
+
+.status-final.cancel {
+  background: rgba(220, 20, 60, 0.15);
+  color: #ff6b86;
+  border: 1px solid rgba(220, 20, 60, 0.35);
+}
+
+.finish-btn,
+.cancel-btn,
+.chat-btn {
+  flex: 1;
+  min-width: 180px;
+  transition: 0.25s;
+  box-shadow: 0 0 18px rgba(0,0,0,0.25);
+}
+
+.finish-btn:hover,
+.cancel-btn:hover,
+.chat-btn:hover {
+  transform: translateY(-3px);
+}
 }
   </style>
 </head>
@@ -1074,36 +1108,42 @@ async function loadOrders() {
               ${order.status}
             </p>
 
-            <div class="seller-buttons">
+           ${order.status === "Завершён" || order.status === "Отменён" ? `
+  <div class="status-final ${order.status === "Завершён" ? "done" : "cancel"}">
+    ${order.status === "Завершён" ? " Продажа завершена" : " Продажа отменена"}
+  </div>
+` : `
+  <div class="seller-buttons">
 
-              <button
-                class="finish-btn"
-                onclick="finishOrder('${order._id}')"
-              >
-                 Продажа завершена
-              </button>
+    <button
+      class="finish-btn"
+      onclick="finishOrder('${order._id}')"
+    >
+       Завершить продажу
+    </button>
 
-              <button
-                class="cancel-btn"
-                onclick="cancelOrder('${order._id}')"
-              >
-                 Продажа отменена
-              </button>
+    <button
+      class="cancel-btn"
+      onclick="cancelOrder('${order._id}')"
+    >
+       Отменить продажу
+    </button>
 
-              <button
-                class="chat-btn"
-                onclick="
-                  openBuyerChat(
-                    '${item._id}',
-                    '${order.user?.email}',
-                    '${order.name}'
-                  )
-                "
-              >
-                 Написать покупателю
-              </button>
+    <button
+      class="chat-btn"
+      onclick="
+        openBuyerChat(
+          '${item._id}',
+          '${order.user?.email}',
+          '${order.name}'
+        )
+      "
+    >
+       Связаться с покупателем
+    </button>
 
-            </div>
+  </div>
+`}
 
           </div>
         `;
