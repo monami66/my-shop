@@ -554,6 +554,98 @@
 
     right: 0;
   }
+  .seller-order {
+
+  background:
+    rgba(255,255,255,0.03);
+
+  border:
+    1px solid rgba(0,255,204,0.15);
+
+  border-radius: 18px;
+
+  padding: 20px;
+
+  margin-top: 18px;
+}
+
+.seller-order img {
+
+  width: 120px;
+
+  height: 120px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+
+  margin-top: 12px;
+}
+
+.seller-buttons {
+
+  display: flex;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+  margin-top: 18px;
+}
+
+.finish-btn {
+
+  background:
+    #00cc88;
+
+  color: black;
+
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+}
+
+.cancel-btn {
+
+  background:
+    crimson;
+
+  color: white;
+
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+}
+
+.chat-btn {
+
+  background:
+    #00ffcc;
+
+  color: black;
+
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+}
 }
   </style>
 </head>
@@ -620,7 +712,7 @@
 
 <div class="orders">
 
-  <h2> История заказов</h2>
+  <h2>🛒 Заказы моих товаров</h2>
 
   <div id="ordersList"></div>
 
@@ -907,12 +999,177 @@ async function loadOrders() {
       </div>
     `;
   });
+  async function loadSellerOrders() {
+
+  const user =
+    JSON.parse(localStorage.getItem("user"));
+
+  if (!user) return;
+
+  const res =
+    await fetch("/orders");
+
+  const orders =
+    await res.json();
+
+  const container =
+    document.getElementById("sellerOrders");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  orders.reverse().forEach(order => {
+
+    (order.items || []).forEach(item => {
+
+      if (
+        item.user &&
+        item.user.email === user.email
+      ) {
+
+        const image =
+          item.images &&
+          item.images.length > 0
+            ? item.images[0]
+            : item.image;
+
+        container.innerHTML += `
+
+          <div class="seller-order">
+
+            <h3>
+              📦 ${item.title}
+            </h3>
+
+            <img src="${image}">
+
+            <p>
+              👤 Покупатель:
+              ${order.name}
+            </p>
+
+            <p>
+              📞 Телефон:
+              ${order.phone}
+            </p>
+
+            <p>
+              📍 Адрес:
+              ${order.address}
+            </p>
+
+            <p>
+              💰 Сумма:
+              ${item.price} ₸
+            </p>
+
+            <p>
+              📄 Статус:
+              ${order.status}
+            </p>
+
+            <div class="seller-buttons">
+
+              <button
+                class="finish-btn"
+                onclick="finishOrder('${order._id}')"
+              >
+                ✅ Продажа завершена
+              </button>
+
+              <button
+                class="cancel-btn"
+                onclick="cancelOrder('${order._id}')"
+              >
+                ❌ Продажа отменена
+              </button>
+
+              <button
+                class="chat-btn"
+                onclick="
+                  openBuyerChat(
+                    '${item._id}',
+                    '${order.user?.email}',
+                    '${order.name}'
+                  )
+                "
+              >
+                💬 Написать покупателю
+              </button>
+
+            </div>
+
+          </div>
+        `;
+      }
+    });
+
+  });
+
+  if (container.innerHTML === "") {
+
+    container.innerHTML = `
+      <p style="color:#888;">
+        Пока заказов нет
+      </p>
+    `;
+  }
+}
+
+async function finishOrder(id) {
+
+  await fetch("/orders/" + id + "/status", {
+
+    method: "PUT",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      status: "Завершён"
+    })
+  });
+
+  loadSellerOrders();
+}
+
+async function cancelOrder(id) {
+
+  await fetch("/orders/" + id + "/status", {
+
+    method: "PUT",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      status: "Отменён"
+    })
+  });
+
+  loadSellerOrders();
+}
+
+function openBuyerChat(
+  productId,
+  buyerEmail,
+  buyerName
+) {
+
+  window.location.href =
+    `/chat.html?productId=${productId}&sellerEmail=${buyerEmail}&sellerName=${buyerName}`;
+}
+
 }
 
 updateCartCount();
 checkUser();
 loadProfile();
 loadOrders();
+loadSellerOrders();
 
 </script>
 
