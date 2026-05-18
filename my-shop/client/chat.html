@@ -803,7 +803,6 @@ async function sendMessage() {
     body: JSON.stringify(messageData)
   });
 
-  renderMessage(messageData);
 
   if (socket) {
   socket.emit("sendMessage", {
