@@ -850,7 +850,7 @@ function renderOrders() {
         </h3>
 
         <p>
-          👤 ${order.name || ""}
+           ${order.name || ""}
         </p>
 
         <p>
@@ -1128,8 +1128,8 @@ async function loadUsers() {
         <p>
           ${
             user.banned
-              ? "🚫 Заблокирован"
-              : "✅ Активен"
+              ? " Заблокирован"
+              : " Активен"
           }
         </p>
 
@@ -1143,7 +1143,7 @@ async function loadUsers() {
                       class="save-btn"
                       onclick="unbanUser('${user._id}')"
                     >
-                      ✅ Разбанить
+                       Разбанить
                     </button>
                   `
                   : `
@@ -1151,7 +1151,7 @@ async function loadUsers() {
                       class="delete-btn"
                       onclick="banUser('${user._id}')"
                     >
-                      🚫 Забанить
+                       Забанить
                     </button>
                   `
               }
@@ -1160,12 +1160,12 @@ async function loadUsers() {
                 class="delete-user-btn"
                 onclick="deleteUser('${user._id}')"
               >
-                🗑 Удалить пользователя
+                 Удалить пользователя
               </button>
             `
             : `
               <p>
-                👑 Главный администратор
+                 Главный администратор
               </p>
             `
         }
@@ -1447,4 +1447,4 @@ loadReviews();
 
 </body>
 </html>
-'${review._id}'
+

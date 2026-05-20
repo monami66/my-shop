@@ -1332,7 +1332,7 @@ async function loadOrders() {
         class="buyer-cancel-btn"
         onclick="cancelBuyerOrder('${order._id}')"
       >
-        ❌ Отменить заказ
+         Отменить заказ
       </button>
     `
     : ""
@@ -1348,7 +1348,7 @@ async function loadOrders() {
       )
     "
   >
-    💬 Связаться с продавцом
+     Связаться с продавцом
   </button>
 ${order.status === "Отменён"
   || order.status === "Завершён"
@@ -1357,7 +1357,7 @@ ${order.status === "Отменён"
       class="buyer-delete-btn"
       onclick="deleteBuyerOrder('${order._id}')"
     >
-      🗑 Удалить заказ
+       Удалить заказ
     </button>
   `
   : ""
